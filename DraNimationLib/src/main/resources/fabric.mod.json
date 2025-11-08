@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "id": "dranimation_lib",
+  "version": "${version}",
+  "name": "DraNimationLib",
+  "description": "Lib for animations and stuff",
+  "authors": [
+    "DraViGen"
+  ],
+  "contact": {
+    "homepage": "https://github.com/DraViGen",
+    "sources": "https://github.com/BTW-Community/Let-Me-Move"
+  },
+  "license": "CC-BY-4.0",
+  "icon": "assets/dranimation_lib/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "net.dravigen.dranimation_lib.DraNimationLibMod"
+    ],
+    "btw:addon": [
+      "net.dravigen.dranimation_lib.DraNimationLibAddon"
+    ]
+  },
+  "custom": {
+    "btw:addon_prefix": "EX"
+  },
+  "mixins": [
+    "dranimation_lib.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.14.19",
+    "minecraft": "1.6.4"
+  }
+}
