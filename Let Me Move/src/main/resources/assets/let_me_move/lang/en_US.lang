@@ -8,4 +8,6 @@ LMM.animation.running=Run
 LMM.animation.standing=Stand
 LMM.animation.walking=Walk
 LMM.animation.busy=Busy
+LMM.animation.riding=Ride
+
 
