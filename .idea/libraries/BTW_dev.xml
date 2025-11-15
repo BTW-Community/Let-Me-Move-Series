@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="BTW_dev">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/Let Me See/build_BTW/BTW_dev/BTW_dev-javadoc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Let Me See/build_BTW/BTW_dev/BTW_dev.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

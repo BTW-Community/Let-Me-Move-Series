@@ -26,6 +26,7 @@ public class AnimPullingUp extends AnimCommon {
 	
 	@Override
 	public boolean isGeneralConditonsMet(EntityPlayer player, AxisAlignedBB axisAlignedBB) {
+		double deltaHeight = yBlockAboveWall - player.boundingBox.minY;
 		return !player.capabilities.isFlying &&
 				!player.isOnLadder() &&
 				player.getHeldItem() == null &&
@@ -34,8 +35,9 @@ public class AnimPullingUp extends AnimCommon {
 				!player.doesStatusPreventSprinting() &&
 				checkIfEntityFacingWall(player) &&
 				(yBlockAboveWall = getWallTopYIfEmptySpace(player)) != -1 &&
-				!(yBlockAboveWall - player.boundingBox.minY < 1.5 && player.onGround) &&
-				!isEntityHeadInsideBlock(player, yBlockAboveWall - player.boundingBox.minY + this.height - 1);
+				!(deltaHeight < 1.5 && player.onGround) &&
+				!(deltaHeight <= 1 && player.motionY > 0) &&
+				!isEntityHeadInsideBlock(player, deltaHeight + this.height - 1);
 	}
 	
 	@Override

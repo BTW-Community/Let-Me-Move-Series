@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="tiny-remapper-0.8.6+local-fat">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/Let Me See/libs/tiny-remapper-0.8.6+local-fat.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

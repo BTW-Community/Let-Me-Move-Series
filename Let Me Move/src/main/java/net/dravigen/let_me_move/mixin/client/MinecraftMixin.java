@@ -6,7 +6,6 @@ import net.dravigen.let_me_move.LetMeMoveAddon;
 import net.minecraft.src.*;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -20,20 +19,10 @@ public abstract class MinecraftMixin {
 	public EntityClientPlayerMP thePlayer;
 	@Shadow
 	private boolean isGamePaused;
-	@Unique
-	private long prevTime = 0;
 	
 	@Inject(method = "runGameLoop", at = @At("HEAD"))
 	private void updateRender(CallbackInfo ci) {
 		if (LetMeMoveAddon.isExtraLoaded()) return;
-		
-		long t = System.currentTimeMillis();
-		float delta = (t - this.prevTime) / 25f;
-		this.prevTime = t;
-		
-		delta = delta > 8 ? 8 : delta;
-		
-		AnimationUtils.delta = delta;
 		
 		EntityPlayer player = this.thePlayer;
 		

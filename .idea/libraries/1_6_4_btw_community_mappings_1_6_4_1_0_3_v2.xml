@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="1.6.4-btw.community.mappings.1_6_4.1.0.3-v2">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/Let Me See/.gradle/loom-cache/minecraftMaven/net/minecraft/minecraft-merged-41d8a8e249/1.6.4-btw.community.mappings.1_6_4.1.0.3-v2/minecraft-merged-41d8a8e249-1.6.4-btw.community.mappings.1_6_4.1.0.3-v2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Let Me See/.gradle/loom-cache/minecraftMaven/net/minecraft/minecraft-merged-41d8a8e249/1.6.4-btw.community.mappings.1_6_4.1.0.3-v2/minecraft-merged-41d8a8e249-1.6.4-btw.community.mappings.1_6_4.1.0.3-v2-javadoc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Let Me See/.gradle/loom-cache/minecraftMaven/net/minecraft/minecraft-merged-41d8a8e249/1.6.4-btw.community.mappings.1_6_4.1.0.3-v2/minecraft-merged-41d8a8e249-1.6.4-btw.community.mappings.1_6_4.1.0.3-v2-sources.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
