@@ -9,5 +9,7 @@ LMM.animation.standing=Stand
 LMM.animation.walking=Walk
 LMM.animation.busy=Busy
 LMM.animation.riding=Ride
+LMM.animation.floating=Floating
+LMM.animation.sleeping=Sleeping
 
 

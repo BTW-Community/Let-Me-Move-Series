@@ -25,8 +25,6 @@ public abstract class EntityPlayerSPMixin extends AbstractClientPlayer {
 	private void updateAnimation(CallbackInfo ci) {
 		if (!AnimationUtils.extraIsPresent) return;
 		
-		if (this.sleeping) return;
-		
 		ICustomMovementEntity customPlayer = (ICustomMovementEntity) this;
 		
 		customPlayer.lmm_$getAnimation().updateLeaning(this);

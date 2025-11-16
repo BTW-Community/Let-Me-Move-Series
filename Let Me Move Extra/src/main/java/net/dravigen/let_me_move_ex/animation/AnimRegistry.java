@@ -19,20 +19,22 @@ public class AnimRegistry {
 	 * Register the animations here, the higher the animation the higher the priority (will be checked first)
 	 */
 	public static void registerAllAnimation() {
-		registerAnimation(CRAWLING, 5);
+		int i = 0;
 		
-		registerAnimation(SWIMMING, 10);
+		registerAnimation(CRAWLING, i += 5);
 		
-		registerAnimation(DASHING, 15);
+		registerAnimation(SWIMMING, i += 5);
 		
-		registerAnimation(ROLLING, 20);
+		registerAnimation(DASHING, i += 5);
 		
-		registerAnimation(PULLING_UP, 25);
+		registerAnimation(ROLLING, i += 5);
 		
-		registerAnimation(WALL_SLIDING, 30);
+		registerAnimation(PULLING_UP, i += 5);
 		
-		registerAnimation(DIVING, 35);
+		registerAnimation(WALL_SLIDING, i += 5);
 		
-		registerAnimation(SKY_DIVING, 40);
+		registerAnimation(DIVING, i += 5);
+		
+		registerAnimation(SKY_DIVING, i += 5);
 	}
 }

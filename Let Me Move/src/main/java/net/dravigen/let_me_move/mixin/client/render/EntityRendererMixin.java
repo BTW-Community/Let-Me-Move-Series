@@ -104,7 +104,7 @@ public abstract class EntityRendererMixin {
 	}
 	
 	@Redirect(method = "orientCamera", at = @At(value = "INVOKE", target = "Lorg/lwjgl/opengl/GL11;glTranslatef(FFF)V", ordinal = 4), remap = false)
-	private void a(float x, float y, float z) {
-		GL11.glTranslatef(x, 0, z);
+	private void customCameraHeight(float x, float y, float z) {
+		GL11.glTranslatef(x, this.mc.thePlayer.isPlayerSleeping() ? y : 0, z);
 	}
 }

@@ -15,14 +15,20 @@ public class AnimRegistry {
 	public final static BaseAnimation WALKING = new AnimWalking();
 	public final static BaseAnimation RUNNING = new AnimRunning();
 	public final static BaseAnimation RIDING = new AnimRiding();
+	public final static BaseAnimation FLOATING = new AnimFloating();
+	public final static BaseAnimation SLEEPING = new AnimSleeping();
 	
 	/**
 	 * Register the animations here, the higher the animation the higher the priority (will be checked first)
 	 */
 	public static void registerAllAnimation() {
-		int i = 100;
+		int i = 500;
+		
+		registerAnimation(SLEEPING, i += 5);
 		
 		registerAnimation(RIDING, i += 5);
+		
+		registerAnimation(FLOATING, i += 5);
 		
 		registerAnimation(LOW_FALLING, i += 5);
 		

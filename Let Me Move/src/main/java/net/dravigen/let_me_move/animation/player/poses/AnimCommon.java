@@ -187,8 +187,9 @@ public class AnimCommon extends BaseAnimation {
 		
 		MovementType movementType = GeneralUtils.getRelativeMovement(player);
 		
+		boolean isFloating = player.inWater && !player.onGround;
 		double motionY = player.posY - player.prevPosY;
-		boolean isJumping = customEntity.lmm_$getJumpTime() > 0;
+		boolean isJumping = customEntity.lmm_$getJumpTime() > 0 && !player.inWater;
 		boolean isCrouching = model.isSneak || customEntity.lmm_$isAnimation(AnimCrouching.id);
 		boolean isFlying = customEntity.lmm_$getIsFlying();
 		float forw = GeneralUtils.getMovementComponents(player)[0];
@@ -350,8 +351,8 @@ public class AnimCommon extends BaseAnimation {
 						rLeg[0] = (float) (-jumpSwing * pi(1, 4) * g * (1 - motionY));
 						lLeg[0] = (float) (jumpSwing * pi(1, 4) * g * (1 - motionY));
 						
-						rLeg[2] = (float) Math.abs(jumpSwing * pi(1, 24) * g * (1 - motionY));
-						lLeg[2] = (float) -Math.abs(jumpSwing * pi(1, 24) * g * (1 - motionY));
+						rLeg[2] = (float) Math.abs(jumpSwing * pi(1, 32) * g * (1 - motionY));
+						lLeg[2] = (float) -Math.abs(jumpSwing * pi(1, 32) * g * (1 - motionY));
 					}
 					else {
 						float v = isCrouching ? 0.25f : 1;
@@ -359,8 +360,8 @@ public class AnimCommon extends BaseAnimation {
 						rArm[0] = (float) (jumpSwing * pi(1, 3) * (1 - motionY) * v1);
 						lArm[0] = (float) (-jumpSwing * pi(1, 3) * (1 - motionY) * v1);
 						
-						rLeg[0] = pi(1, 16) * Math.max(0, jumpSwing * 2) * v;
-						lLeg[0] = pi(1, 16) * Math.max(0, -jumpSwing * 2) * v;
+						rLeg[0] = pi(1, 16) * (jumpSwing < 0 ? backward ? 0 : 3 : backward ? -2 : 2) * v;
+						lLeg[0] = pi(1, 16) * (-jumpSwing < 0 ? backward ? 0 : 3 : backward ? -2 : 2) * v;
 						
 						rLeg[4] = (float) (12 - Math.max(0, jumpSwing * 2) * 2 * motYposRev * v1);
 						rLeg[5] = (float) (-Math.max(0, jumpSwing * 2) * g * 2 * motYposRev * v);
@@ -393,7 +394,7 @@ public class AnimCommon extends BaseAnimation {
 				}
 			}
 			else {
-				f *= backward ? -0.75f : 1;
+				f *= backward ? -0.5f : 1;
 				g *= backward ? 0.75f : 1;
 				
 				f = isCrouching ? backward ? -h * 0.75f : h : f;
@@ -401,96 +402,114 @@ public class AnimCommon extends BaseAnimation {
 				
 				g *= model.aimedBow || model.heldItemRight == 3 ? 2f : 1;
 				
-				f = player.inWater ? h / 3 : f;
-				g = player.inWater ? 0.5f : g;
 				
-				if (isMoving) {
-					rArm[0] = cos(f * mul) * 2.0F * g * (bSprint ? 0.8f : 0.5F) / k;
-					lArm[0] = cos(f * mul + pi) * 2.0F * g * (bSprint ? 0.8f : 0.5F) / k;
+				if (isFloating) {
+					rArm[2] = (cos(h / 6) + 1) * pi(1, 8);
+					lArm[2] = -(cos(h / 6) + 1) * pi(1, 8);
 					
-					body[0] = (cos(f * mul * 2) + 1) * g * (bSprint ? 0.1f : 0) / k + (bSprint ? pi(1, 32) : 0);
-					body[1] = cos(f * mul) * g * (bSprint ? 0.0f : backward ? 0.5f : 0.3F) * (isCrouching ? 0.25f : 1) /
-							k;
+					rArm[0] = sin(h / 6 + pi) * g * pi(1, 2);
+					lArm[0] = sin(h / 6 + pi) * g * pi(1, 2);
 					
-					if (!isCrouching) {
-						rLeg[1] = pi(1, 64);
-						lLeg[1] = -pi(1, 64);
-					}
+					rArm[4] -= cos(h / 6 + pi(1, 2));
+					lArm[4] -= cos(h / 6 + pi(1, 2));
 					
-					rLeg[0] = Math.max(-2, (cos(f * mul + pi)) * g * (bSprint ? 0.9f : 0.6f) / k);
-					rLeg[2] = pi(1, 100);
-					
-					lLeg[0] = Math.max(-2, (cos(f * mul)) * g * (bSprint ? 0.9f : 0.6f) / k);
-					lLeg[2] = -pi(1, 100);
-					
-					if (player.inWater && !isHeadInsideWater(player)) {
-						body[0] = (cos(f * mul * 2) + 1) * g * 0.25F / k;
-						body[1] = cos(f * mul) * g * 0.6F / k;
-						
-						rArm[2] += pi(1, 3);
-						lArm[2] -= pi(1, 3);
-						
-						rArm[0] = cos(f * mul) * 2.0F * g * 1f / k;
-						lArm[0] = cos(f * mul + pi) * 2.0F * g * 1f / k;
-						
-						rArm[4] -= 1;
-						lArm[4] -= 1;
-					}
-					
-					head[4] = 12 - cos(body[0]) * 12;
-					head[5] = -sin(body[0]) * 12;
-					rArm[3] = -cos(body[1]) * 5.0F;
-					rArm[4] = 12 - cos(body[0]) * 10;
-					rArm[5] = sin(body[1]) * 5.0F - sin(body[0]) * 12;
-					lArm[3] = cos(body[1]) * 5.0F;
-					lArm[4] = 12 - cos(body[0]) * 10;
-					lArm[5] = -sin(body[1]) * 5.0F - sin(body[0]) * 12;
-					rLeg[3] = -cos(body[1]) * 2f;
-					rLeg[4] = Math.max((sin(f * mul) - 1) * g * (bSprint ? 2f : 1.3f) + 12, (bSprint ? 6 : 8));
-					rLeg[5] = -sin(body[1]) * 2f;
-					lLeg[3] = cos(body[1]) * 2f;
-					lLeg[4] = Math.max((sin(f * mul + pi) - 1) * g * (bSprint ? 2f : 1.3f) + 12, (bSprint ? 6 : 8));
-					lLeg[5] = sin(body[1]) * 2f;
-					
-					rArm[1] += body[1] + (bSprint ? cos(f * mul) * pi(1, 8) : 0);
-					lArm[1] += body[1] + (bSprint ? cos(f * mul) * pi(1, 8) : 0);
-					head[0] += body[0];
-					//head[1] += -body[1] / 3;
-					
-					float v = 2f;
-					float v1 = bSprint ? 3.5f : backward ? 0.2f : 2f;
-					float v2 = Math.min(cos(f * mul * v) * g * v1, 2) *
-							(entity == Minecraft.getMinecraft().thePlayer &&
-									 Minecraft.getMinecraft().gameSettings.thirdPersonView == 0 ? 0.25f : 1);
-					
-					head[4] -= v2;
-					body[4] -= v2;
-					rArm[4] -= v2;
-					lArm[4] -= v2;
-					rLeg[4] -= v2;
-					lLeg[4] -= v2;
+					rLeg[0] = cos(h / 3) * (g + 1) * pi(1, 5);
+					lLeg[0] = cos(h / 3 + pi) * (g + 1) * pi(1, 5);
 				}
 				else {
-					rArm[1] = rArm[1] + body[1];
-					lArm[1] = lArm[1] + body[1];
-					body[1] += head[1] * (isCrouching ? 0 : 0.5f);
-					rArm[1] += body[1] * 0.75f;
-					lArm[1] += body[1] * 0.75f;
+					f = player.inWater ? h / 3 : f;
+					g = player.inWater ? 0.5f : g;
 					
-					rArm[3] = -cos(body[1] * 0.75f) * 5.0F;
-					rArm[5] = sin(body[1] * 0.75f) * 5.0F;
-					lArm[3] = cos(body[1] * 0.75f) * 5.0F;
-					lArm[5] = -sin(body[1] * 0.75f) * 5.0F;
-					
-					rLeg[0] -= pi(1, 80);
-					rLeg[2] += pi(1, 50);
-					lLeg[0] += pi(1, 128);
-					lLeg[2] -= pi(1, 50);
-					rLeg[1] += pi(1, 32);
-					lLeg[1] -= pi(1, 12);
-					
-					rLeg[5] -= 0.6f;
-					lLeg[5] += 0.5f;
+					if (isMoving) {
+						rArm[0] = cos(f * mul) * 2.0F * g * (bSprint ? 0.8f : 0.65F) / k;
+						lArm[0] = cos(f * mul + pi) * 2.0F * g * (bSprint ? 0.8f : 0.65F) / k;
+						
+						body[0] = (cos(f * mul * 2) + 1) * g * (bSprint ? 0.1f : 0) / k + (bSprint ? pi(1, 32) : 0);
+						body[1] = cos(f * mul) *
+								g *
+								(bSprint ? 0.0f : backward ? 0.8f : 0.5F) *
+								(isCrouching ? 0.25f : 1) / k;
+						
+						if (!isCrouching) {
+							rLeg[1] = pi(1, 64);
+							lLeg[1] = -pi(1, 64);
+						}
+						
+						rLeg[0] = Math.max(-2, (cos(f * mul + pi)) * g * (bSprint ? 0.9f : 0.6f) / k);
+						rLeg[2] = pi(1, 100);
+						
+						lLeg[0] = Math.max(-2, (cos(f * mul)) * g * (bSprint ? 0.9f : 0.6f) / k);
+						lLeg[2] = -pi(1, 100);
+						
+						if (player.inWater && !isHeadInsideWater(player)) {
+							body[0] = (cos(f * mul * 2) + 1) * g * 0.25F / k;
+							body[1] = cos(f * mul) * g * 0.6F / k;
+							
+							rArm[2] += pi(1, 3);
+							lArm[2] -= pi(1, 3);
+							
+							rArm[0] = cos(f * mul) * 2.0F * g * 1f / k;
+							lArm[0] = cos(f * mul + pi) * 2.0F * g * 1f / k;
+							
+							rArm[4] -= 1;
+							lArm[4] -= 1;
+						}
+						
+						head[4] = 12 - cos(body[0]) * 12;
+						head[5] = -sin(body[0]) * 12;
+						rArm[3] = -cos(body[1]) * 5.0F;
+						rArm[4] = 12 - cos(body[0]) * 10;
+						rArm[5] = sin(body[1]) * 5.0F - sin(body[0]) * 12;
+						lArm[3] = cos(body[1]) * 5.0F;
+						lArm[4] = 12 - cos(body[0]) * 10;
+						lArm[5] = -sin(body[1]) * 5.0F - sin(body[0]) * 12;
+						rLeg[3] = -cos(body[1]) * 2f;
+						rLeg[4] = Math.max((sin(f * mul) - 1) * g * (bSprint ? 2.5f : 1.75f) + 12, 6);
+						rLeg[5] = -sin(body[1]) * 2f;
+						lLeg[3] = cos(body[1]) * 2f;
+						lLeg[4] = Math.max((sin(f * mul + pi) - 1) * g * (bSprint ? 2.5f : 1.75f) + 12, 6);
+						lLeg[5] = sin(body[1]) * 2f;
+						
+						rArm[1] += body[1] + (bSprint ? cos(f * mul) * pi(1, 8) : 0);
+						lArm[1] += body[1] + (bSprint ? cos(f * mul) * pi(1, 8) : 0);
+						head[0] += body[0];
+						//head[1] += -body[1] / 3;
+						
+						float v = 2f;
+						float v1 = bSprint ? 3.5f : backward ? 0.2f : 2f;
+						float v2 = Math.min(cos(f * mul * v) * g * v1, 2) *
+								(entity == Minecraft.getMinecraft().thePlayer &&
+										 Minecraft.getMinecraft().gameSettings.thirdPersonView == 0 ? 0.25f : 1);
+						
+						head[4] -= v2;
+						body[4] -= v2;
+						rArm[4] -= v2;
+						lArm[4] -= v2;
+						rLeg[4] -= v2;
+						lLeg[4] -= v2;
+					}
+					else {
+						rArm[1] = rArm[1] + body[1];
+						lArm[1] = lArm[1] + body[1];
+						body[1] += head[1] * (isCrouching ? 0 : 0.5f);
+						rArm[1] += body[1] * 0.75f;
+						lArm[1] += body[1] * 0.75f;
+						
+						rArm[3] = -cos(body[1] * 0.75f) * 5.0F;
+						rArm[5] = sin(body[1] * 0.75f) * 5.0F;
+						lArm[3] = cos(body[1] * 0.75f) * 5.0F;
+						lArm[5] = -sin(body[1] * 0.75f) * 5.0F;
+						
+						rLeg[0] -= pi(1, 80);
+						rLeg[2] += pi(1, 50);
+						lLeg[0] += pi(1, 128);
+						lLeg[2] -= pi(1, 50);
+						rLeg[1] += pi(1, 32);
+						lLeg[1] -= pi(1, 12);
+						
+						rLeg[5] -= 0.6f;
+						lLeg[5] += 0.5f;
+					}
 				}
 			}
 		}

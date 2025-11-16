@@ -29,25 +29,13 @@ public abstract class EntityRendererMixin {
 		if (mc.gameSettings.thirdPersonView == 0) {
 			
 			float delta = AnimationUtils.delta;
-			float goal;
 			
 			EntityClientPlayerMP player = mc.thePlayer;
 			
-			if (player.moveStrafing != 0) {
-				goal = -3 * player.moveStrafing * player.moveStrafing * player.moveStrafing;
-			}
-			else {
-				goal = 1.5f * (player.rotationYaw - prevYaw);
-			}
+			float goal = (player.moveStrafing != 0 ? (float) (-2.5f * Math.pow(player.moveStrafing, 3)) : 0) +
+					1.25f * (player.rotationYaw - prevYaw);
 			
-			float factor;
-			
-			if (player.moveStrafing == 0 || player.rotationYaw - prevYaw == 0) {
-				factor = 0.15f;
-			}
-			else {
-				factor = 0.005f;
-			}
+			float factor = player.moveStrafing == 0 || player.rotationYaw - prevYaw == 0 ? 0.15f : 0.005f;
 			
 			prevYaw = player.rotationYaw;
 			
@@ -62,29 +50,19 @@ public abstract class EntityRendererMixin {
 		if (mc.gameSettings.thirdPersonView == 0) {
 			
 			float delta = AnimationUtils.delta;
-			float goal = 0;
 			
 			EntityClientPlayerMP player = Minecraft.getMinecraft().thePlayer;
 			
-			if (player.moveForward != 0) {
-				goal = 2 * player.moveForward;
-			}
+			float goal = player.moveForward != 0 ? 2 * player.moveForward : 0;
 			
-			float factor1;
-			float factor2;
+			boolean moving = player.moveForward == 0 || player.motionY == 0;
 			
-			if (player.moveForward == 0 || player.motionY == 0) {
-				factor1 = 0.2f;
-				factor2 = 0.4f;
-			}
-			else {
-				factor1 = 0.04f;
-				factor2 = 0.125f;
-			}
+			float factor1 = moving ? 0.2f : 0.04f;
+			float factor2 = moving ? 0.4f : 0.125f;
 			
 			frowAngle = MathHelper.clamp_float(incrementUntilGoal(frowAngle, goal, delta * factor1), -5, 5);
 			jumpAngle = MathHelper.clamp_float(incrementUntilGoal(jumpAngle,
-																  8 * (float) player.motionY,
+																  12 * (float) player.motionY,
 																  delta * factor2), -5, 5);
 			
 			GL11.glRotatef(angle * 2f + frowAngle, x, y, z);
@@ -93,7 +71,7 @@ public abstract class EntityRendererMixin {
 	}
 	
 	@Inject(method = "renderHand", at = @At("HEAD"), cancellable = true)
-	private void a(float par1, int par2, CallbackInfo ci) {
+	private void disable1stPersonHandUnlessHoldingMap(float par1, int par2, CallbackInfo ci) {
 		ItemStack item = mc.thePlayer.getHeldItem();
 		
 		boolean holdingSpecialItem = item != null && item.itemID == Item.map.itemID;

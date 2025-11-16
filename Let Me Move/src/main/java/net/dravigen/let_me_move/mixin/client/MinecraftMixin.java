@@ -27,7 +27,11 @@ public abstract class MinecraftMixin {
 		EntityPlayer player = this.thePlayer;
 		
 		if (!this.isGamePaused && this.theWorld != null && player != null) {
-			player.yOffset = GeneralUtils.incrementUntilGoal(player.yOffset, player.height - 0.18f, 0.4f * AnimationUtils.delta);
+			if (!player.isPlayerSleeping()) {
+				player.yOffset = GeneralUtils.incrementUntilGoal(player.yOffset,
+																 player.height - 0.18f,
+																 0.4f * AnimationUtils.delta);
+			}
 			
 			float yaw = (player.renderYawOffset) % (360);
 			

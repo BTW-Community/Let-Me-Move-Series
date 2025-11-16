@@ -9,8 +9,9 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/Let_Me_Move_!.test.iml" filepath="$PROJECT_DIR$/.idea/modules/Let_Me_Move_!.test.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/Let_Me_Move_!_(Extra).main.iml" filepath="$PROJECT_DIR$/.idea/modules/Let_Me_Move_!_(Extra).main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/Let_Me_Move_!_(Extra).test.iml" filepath="$PROJECT_DIR$/.idea/modules/Let_Me_Move_!_(Extra).test.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Let_Me_See_!.main.iml" filepath="$PROJECT_DIR$/.idea/modules/Let_Me_See_!.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Let_Me_See_!.test.iml" filepath="$PROJECT_DIR$/.idea/modules/Let_Me_See_!.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Let_Me_See_!.iml" filepath="$PROJECT_DIR$/.idea/modules/Let_Me_See_!.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/net.dravigen.Let_Me_See_!.main.iml" filepath="$PROJECT_DIR$/.idea/modules/net.dravigen.Let_Me_See_!.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/net.dravigen.Let_Me_See_!.test.iml" filepath="$PROJECT_DIR$/.idea/modules/net.dravigen.Let_Me_See_!.test.iml" />
     </modules>
   </component>
 </project>

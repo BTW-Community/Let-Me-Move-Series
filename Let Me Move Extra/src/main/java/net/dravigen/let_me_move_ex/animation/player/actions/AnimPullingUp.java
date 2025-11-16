@@ -35,8 +35,10 @@ public class AnimPullingUp extends AnimCommon {
 				!player.doesStatusPreventSprinting() &&
 				checkIfEntityFacingWall(player) &&
 				(yBlockAboveWall = getWallTopYIfEmptySpace(player)) != -1 &&
-				!(deltaHeight < 1.5 && player.onGround) &&
-				!(deltaHeight <= 1 && player.motionY > 0) &&
+				!(deltaHeight <= 1.5f && player.onGround) &&
+				!(deltaHeight < 1.5f &&
+						!player.worldObj.getCollidingBlockBounds(player.boundingBox.copy().offset(0, -1, 0))
+								.isEmpty()) &&
 				!isEntityHeadInsideBlock(player, deltaHeight + this.height - 1);
 	}
 	
@@ -132,6 +134,7 @@ public class AnimPullingUp extends AnimCommon {
 			int timeRendered = customPlayer.lmm_$getTimeRendered();
 			
 			if (player.isEating() ||
+					player.onGround ||
 					timeRendered < 0 ||
 					((EntityPlayer) player).doesStatusPreventSprinting() ||
 					!player.isSneaking() ||

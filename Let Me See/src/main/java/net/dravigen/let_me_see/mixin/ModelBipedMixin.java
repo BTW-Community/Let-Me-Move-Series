@@ -6,7 +6,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ModelBiped.class)
@@ -17,10 +16,6 @@ public abstract class ModelBipedMixin {
 	public ModelRenderer bipedRightArm;
 	@Shadow
 	public ModelRenderer bipedLeftArm;
-	@Shadow
-	public ModelRenderer bipedRightLeg;
-	@Shadow
-	public ModelRenderer bipedLeftLeg;
 	@Shadow
 	public ModelRenderer bipedCloak;
 	
@@ -56,24 +51,5 @@ public abstract class ModelBipedMixin {
 		}
 		
 		this.bipedCloak.showModel = this.bipedBody.showModel;
-	}
-	
-	@Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/src/ModelBiped;setRotationAngles(FFFFFFLnet/minecraft/src/Entity;)V", shift = At.Shift.AFTER))
-	private void offsetIf3D(Entity entity, float f, float g, float h, float i, float k, float par7,
-			CallbackInfo ci) {
-		Minecraft mc = Minecraft.getMinecraft();
-		if (LetMeSeeAddon.enable3DFirstPerson &&
-				entity == mc.thePlayer &&
-				mc.gameSettings.thirdPersonView == 0 &&
-				entity.height >= 1.4f &&
-				!(mc.currentScreen instanceof GuiContainerCreative || mc.currentScreen instanceof GuiInventory)) {
-			float v = 4f;
-			this.bipedBody.rotationPointZ += v;
-			this.bipedRightArm.rotationPointZ += v;
-			this.bipedLeftArm.rotationPointZ += v;
-			this.bipedRightLeg.rotationPointZ += v;
-			this.bipedLeftLeg.rotationPointZ += v;
-			this.bipedCloak.rotationPointZ += v;
-		}
 	}
 }
