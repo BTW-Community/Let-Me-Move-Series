@@ -48,7 +48,7 @@ public class AnimCommon extends BaseAnimation {
 	}
 	
 	protected void eatFood(float h, EntityLivingBase player, float[] head, float[] rArm) {
-		if (player.isEating() && !(player.getHeldItem().getItem() instanceof ItemSword)) {
+		if (player.isEating() && (player.getHeldItem().getItem() instanceof ItemFood)) {
 			head[0] = sin(h * 2) * pi(1, 32) + pi(1, 12);
 			head[1] = 0;
 			
@@ -459,7 +459,9 @@ public class AnimCommon extends BaseAnimation {
 					
 					float v = 2f;
 					float v1 = bSprint ? 3.5f : backward ? 0.2f : 2f;
-					float v2 = Math.min(cos(f * mul * v) * g * v1, 2);
+					float v2 = Math.min(cos(f * mul * v) * g * v1, 2) *
+							(entity == Minecraft.getMinecraft().thePlayer &&
+									 Minecraft.getMinecraft().gameSettings.thirdPersonView == 0 ? 0.25f : 1);
 					
 					head[4] -= v2;
 					body[4] -= v2;

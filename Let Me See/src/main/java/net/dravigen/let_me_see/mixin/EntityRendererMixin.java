@@ -24,7 +24,6 @@ public abstract class EntityRendererMixin {
 	@Unique
 	float prevYaw = 0;
 	
-	
 	@Redirect(method = "setupViewBobbing", at = @At(value = "INVOKE", target = "Lorg/lwjgl/opengl/GL11;glRotatef(FFFF)V", ordinal = 0), remap = false)
 	private void customBobbingRoll(float angle, float x, float y, float z) {
 		if (mc.gameSettings.thirdPersonView == 0) {
@@ -35,26 +34,26 @@ public abstract class EntityRendererMixin {
 			EntityClientPlayerMP player = mc.thePlayer;
 			
 			if (player.moveStrafing != 0) {
-				goal = 3 * -player.moveStrafing;
+				goal = -3 * player.moveStrafing * player.moveStrafing * player.moveStrafing;
 			}
 			else {
-				goal = 2 * (player.rotationYaw - prevYaw);
+				goal = 1.5f * (player.rotationYaw - prevYaw);
 			}
 			
 			float factor;
 			
 			if (player.moveStrafing == 0 || player.rotationYaw - prevYaw == 0) {
-				factor = 0.2f;
+				factor = 0.15f;
 			}
 			else {
-				factor = 0.015f;
+				factor = 0.005f;
 			}
 			
 			prevYaw = player.rotationYaw;
 			
 			strafAngle = MathHelper.clamp_float(incrementUntilGoal(strafAngle, goal, delta * factor), -10, 10);
 			
-			GL11.glRotatef(angle * 2f + strafAngle, x, y, z);
+			GL11.glRotatef(angle * 3f + strafAngle, x, y, z);
 		}
 	}
 	
@@ -79,7 +78,7 @@ public abstract class EntityRendererMixin {
 				factor2 = 0.4f;
 			}
 			else {
-				factor1 = 0.025f;
+				factor1 = 0.04f;
 				factor2 = 0.125f;
 			}
 			
@@ -88,15 +87,18 @@ public abstract class EntityRendererMixin {
 																  8 * (float) player.motionY,
 																  delta * factor2), -5, 5);
 			
-			GL11.glRotatef(angle * 1.2f + frowAngle, x, y, z);
+			GL11.glRotatef(angle * 2f + frowAngle, x, y, z);
 			GL11.glRotatef(jumpAngle, x, y, z);
 		}
 	}
 	
-	
 	@Inject(method = "renderHand", at = @At("HEAD"), cancellable = true)
 	private void a(float par1, int par2, CallbackInfo ci) {
-		if (LetMeSeeAddon.enable3DFirstPerson) {
+		ItemStack item = mc.thePlayer.getHeldItem();
+		
+		boolean holdingSpecialItem = item != null && item.itemID == Item.map.itemID;
+		
+		if (LetMeSeeAddon.enable3DFirstPerson && !holdingSpecialItem) {
 			ci.cancel();
 		}
 	}
