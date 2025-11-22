@@ -37,8 +37,12 @@ public abstract class RenderPlayerMixin {
 		
 		customEntity.lmm_$setCapeRot(0,
 									 GeneralUtils.incrementUntilGoal(customEntity.lmm_$getCapeRot()[0],
-																	 MathHelper.clamp_float(angle + partHolder.getBody()[0] * 180 / pi, 0, 90),
-																	 0.5f * AnimationUtils.delta));
+																	 MathHelper.clamp_float(angle +
+																									partHolder.getBody()[0] *
+																											180 / pi,
+																							0,
+																							90),
+																	 0.4f * AnimationUtils.delta));
 		GL11.glRotatef(customEntity.lmm_$getCapeRot()[0], x, y, z);
 	}
 	

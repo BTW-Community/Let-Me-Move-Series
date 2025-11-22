@@ -51,19 +51,17 @@ public class AnimSwimming extends AnimBaseAction {
 		ICustomMovementEntity customEntity = (ICustomMovementEntity) entity;
 		ModelPartHolder partHolder = customEntity.lmm_$getParHolder();
 		
-		//partHolder.resetAnimationRotationPoints();
-		
 		float leaningPitch = Math.min(1.0F,
 									  customEntity.lmm_$getLeaningPitch(Minecraft.getMinecraft()
 																				.getTimer().renderPartialTicks));
 		
 		if (entity.moveForward != 0 || entity.moveStrafing != 0) {
 			entity.renderYawOffset = incrementAngleUntilGoal(entity.renderYawOffset,
-															 entity.rotationYaw -
+															 MathHelper.clamp_float(entity.rotationYaw -
 																	 90 *
 																			 (entity.moveStrafing -
 																					 entity.moveStrafing / 2 *
-																							 entity.moveForward),
+																							 entity.moveForward), -45 + entity.rotationYaw, 45 + entity.rotationYaw),
 															 delta * 0.1f);
 		}
 		
@@ -250,17 +248,19 @@ public class AnimSwimming extends AnimBaseAction {
 				
 				float speed = 0.2f * player.getMovementSpeedModifierFromEffects();
 				
-				player.motionX = direction.xCoord * speed;
-				player.motionZ = direction.zCoord * speed;
+				player.moveFlying(player.moveStrafing, player.moveForward, speed * 0.4f);
 				
 				player.moveEntity(player.motionX, direction.yCoord * speed + player.motionY, player.motionZ);
 				
 				player.motionY *= 0.5f;
+				player.motionX *= 0.6f;
+				player.motionZ *= 0.6f;
 				
 				player.prevLimbSwingAmount = player.limbSwingAmount;
-				double var9 = player.posX - player.prevPosX;
-				double var10 = player.posZ - player.prevPosZ;
-				float var12 = MathHelper.sqrt_double(var9 * var9 + var10 * var10) * 4.0f;
+				double deltaX = player.posX - player.prevPosX;
+				double deltaY = player.posY - player.prevPosY;
+				double deltaZ = player.posZ - player.prevPosZ;
+				float var12 = MathHelper.sqrt_double(deltaY * deltaY + deltaX * deltaX + deltaZ * deltaZ) * 4.0f;
 				
 				if (var12 > 1.0f) {
 					var12 = 1.0f;
@@ -274,6 +274,15 @@ public class AnimSwimming extends AnimBaseAction {
 			else {
 				player.limbSwingAmount = 0;
 			}
+			
+			player.moveEntity(player.motionX, -0.02, player.motionZ);
+			
+			player.motionY *= 0.5f;
+			player.motionX *= 0.9f;
+			player.motionZ *= 0.9f;
+			player.motionY -= 0.02;
+			
+			return true;
 		}
 		
 		return false;

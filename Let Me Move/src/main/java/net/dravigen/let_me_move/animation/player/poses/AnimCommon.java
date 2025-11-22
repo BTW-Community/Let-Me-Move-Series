@@ -308,8 +308,8 @@ public class AnimCommon extends BaseAnimation {
 				lLeg[4] += v;
 				
 				if (forw > 0 || straf != 0 && !(forw < 0)) {
-					rLeg[4] -= 2;
-					rLeg[5] -= 3;
+					rLeg[4] -= 2 * g;
+					rLeg[5] -= 3 * g;
 				}
 			}
 			else if (isJumping) {
