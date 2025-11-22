@@ -1,8 +1,10 @@
 package net.dravigen.let_me_see.mixin;
 
 import btw.client.texture.CustomUpdatingTexture;
+import net.dravigen.dranimation_lib.DraNimationLibAddon;
 import net.dravigen.dranimation_lib.utils.GeneralUtils;
 import net.dravigen.let_me_see.LetMeSeeAddon;
+import net.dravigen.let_me_see.config.LmsSettings;
 import net.minecraft.src.*;
 import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
@@ -42,7 +44,7 @@ public abstract class RenderPlayerMixin extends RendererLivingEntity {
 		Minecraft mc = Minecraft.getMinecraft();
 		ItemStack heldItem = mc.thePlayer.getHeldItem();
 		
-		if (LetMeSeeAddon.enable3DFirstPerson &&
+		if (DraNimationLibAddon.settingsManager.getBoolean(LmsSettings.firstPersonModelID) &&
 				mc.gameSettings.thirdPersonView == 0 &&
 				heldItem != null &&
 				(heldItem.itemID == Item.map.itemID) &&
@@ -56,7 +58,7 @@ public abstract class RenderPlayerMixin extends RendererLivingEntity {
 	private void offsetPlayerIn1stPerson(AbstractClientPlayer entity, float par2, float par3, float par4,
 			CallbackInfo ci) {
 		Minecraft mc = Minecraft.getMinecraft();
-		if (LetMeSeeAddon.enable3DFirstPerson &&
+		if (DraNimationLibAddon.settingsManager.getBoolean(LmsSettings.firstPersonModelID) &&
 				entity == mc.thePlayer &&
 				mc.gameSettings.thirdPersonView == 0 &&
 				entity.height >= 1.4f &&

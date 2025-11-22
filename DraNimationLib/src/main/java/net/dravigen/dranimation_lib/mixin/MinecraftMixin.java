@@ -1,5 +1,6 @@
 package net.dravigen.dranimation_lib.mixin;
 
+import net.dravigen.dranimation_lib.DraNimationLibAddon;
 import net.dravigen.dranimation_lib.utils.AnimationUtils;
 import net.minecraft.src.Minecraft;
 import org.spongepowered.asm.mixin.Mixin;
@@ -23,5 +24,10 @@ public abstract class MinecraftMixin {
 		delta = delta > 8 ? 8 : delta;
 		
 		AnimationUtils.delta = delta;
+	}
+	
+	@Inject(method = "shutdownMinecraftApplet", at = @At("HEAD"))
+	private void saveSettings(CallbackInfo ci) {
+		DraNimationLibAddon.settingsManager.save();
 	}
 }

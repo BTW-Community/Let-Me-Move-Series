@@ -1,6 +1,8 @@
 package net.dravigen.let_me_see.mixin;
 
+import net.dravigen.dranimation_lib.DraNimationLibAddon;
 import net.dravigen.let_me_see.LetMeSeeAddon;
+import net.dravigen.let_me_see.config.LmsSettings;
 import net.minecraft.src.*;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
@@ -16,7 +18,7 @@ public abstract class RenderGlobalMixin {
 	
 	@Redirect(method = "renderEntities", at = @At(value = "FIELD", target = "Lnet/minecraft/src/GameSettings;thirdPersonView:I", opcode = Opcodes.GETFIELD, ordinal = 0))
 	private int renderPlayerIn1stPerson(GameSettings instance) {
-		if (LetMeSeeAddon.enable3DFirstPerson &&
+		if (DraNimationLibAddon.settingsManager.getBoolean(LmsSettings.firstPersonModelID) &&
 				!(mc.currentScreen instanceof GuiContainerCreative || mc.currentScreen instanceof GuiInventory)) {
 			return 1;
 		}

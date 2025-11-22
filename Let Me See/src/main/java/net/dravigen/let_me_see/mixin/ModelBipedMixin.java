@@ -1,6 +1,7 @@
 package net.dravigen.let_me_see.mixin;
 
-import net.dravigen.let_me_see.LetMeSeeAddon;
+import net.dravigen.dranimation_lib.DraNimationLibAddon;
+import net.dravigen.let_me_see.config.LmsSettings;
 import net.minecraft.src.*;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -22,17 +23,21 @@ public abstract class ModelBipedMixin {
 	@Shadow
 	public ModelRenderer bipedHead;
 	
+	@Shadow
+	public ModelRenderer bipedHeadwear;
+	
 	@Inject(method = "render", at = @At("HEAD"))
 	private void hideBasePart(Entity entity, float par2, float par3, float par4, float par5, float par6, float par7,
 			CallbackInfo ci) {
 		Minecraft mc = Minecraft.getMinecraft();
 		
-		if (LetMeSeeAddon.enable3DFirstPerson &&
+		if (DraNimationLibAddon.settingsManager.getBoolean(LmsSettings.firstPersonModelID) &&
 				entity == mc.thePlayer &&
 				mc.gameSettings.thirdPersonView == 0 &&
 				!(mc.currentScreen instanceof GuiContainerCreative || mc.currentScreen instanceof GuiInventory)) {
 			this.bipedBody.showModel = entity.height > 1.4;
 			this.bipedHead.showModel = false;
+			this.bipedHeadwear.showModel = false;
 			
 			ItemStack heldItem = mc.thePlayer.getHeldItem();
 			if (heldItem != null && (heldItem.itemID == Item.map.itemID)) {
@@ -46,6 +51,7 @@ public abstract class ModelBipedMixin {
 		}
 		else {
 			this.bipedHead.showModel = true;
+			this.bipedHeadwear.showModel = true;
 			this.bipedBody.showModel = true;
 			this.bipedRightArm.showModel = true;
 			this.bipedLeftArm.showModel = true;

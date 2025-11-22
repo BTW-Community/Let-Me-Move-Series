@@ -254,7 +254,7 @@ public class GeneralUtils {
 		
 		return (AxisAlignedBB) boundingBoxes.get(boundingBoxes.size() - 1);
 	}
-
+	
 	@SuppressWarnings("unchecked")
 	private static List<AxisAlignedBB> getBlockBoundCenteredList(Entity entity, double x, double y, double z,
 			double height) {
