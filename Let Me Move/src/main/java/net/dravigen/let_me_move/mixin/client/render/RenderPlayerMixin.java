@@ -4,8 +4,6 @@ import net.dravigen.dranimation_lib.interfaces.ICustomMovementEntity;
 import net.dravigen.dranimation_lib.utils.AnimationUtils;
 import net.dravigen.dranimation_lib.utils.GeneralUtils;
 import net.dravigen.dranimation_lib.utils.ModelPartHolder;
-import net.dravigen.let_me_move.animation.player.poses.AnimCrouching;
-import net.dravigen.let_me_move.animation.player.poses.AnimStanding;
 import net.minecraft.src.*;
 import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
@@ -15,8 +13,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import static net.dravigen.dranimation_lib.utils.GeneralUtils.cos;
-import static net.dravigen.dranimation_lib.utils.GeneralUtils.sin;
+import static net.dravigen.dranimation_lib.utils.GeneralUtils.*;
 
 @Mixin(RenderPlayer.class)
 public abstract class RenderPlayerMixin {
@@ -26,10 +23,7 @@ public abstract class RenderPlayerMixin {
 	
 	@Redirect(method = "renderSpecials", at = @At(value = "INVOKE", target = "Lnet/minecraft/src/AbstractClientPlayer;isSneaking()Z"))
 	private boolean customSneakCheck(AbstractClientPlayer player) {
-		ICustomMovementEntity customEntity = (ICustomMovementEntity) player;
-		
-		return customEntity.lmm_$isAnimation(AnimStanding.id) && player.isSneaking() ||
-				customEntity.lmm_$isAnimation(AnimCrouching.id);
+		return false;
 	}
 	
 	@Redirect(method = "renderSpecials", at = @At(value = "INVOKE", target = "Lorg/lwjgl/opengl/GL11;glRotatef(FFFF)V", ordinal = 5), remap = false)
@@ -37,15 +31,13 @@ public abstract class RenderPlayerMixin {
 		ICustomMovementEntity customEntity = (ICustomMovementEntity) player;
 		ModelPartHolder partHolder = customEntity.lmm_$getParHolder();
 		
-		boolean sneak = customEntity.lmm_$isAnimation(AnimStanding.id) && player.isSneaking() ||
-				customEntity.lmm_$isAnimation(AnimCrouching.id);
-		float z1 = sneak ? 0 : -((sin(partHolder.getBody()[0]) * 12) / 16);
-		
-		GL11.glTranslatef(0, (partHolder.getBody()[4] - cos(partHolder.getBody()[0]) * 12) / 16, z1);
+		GL11.glTranslatef(partHolder.getBody()[3] / 16,
+						  (partHolder.getBody()[4] - cos(partHolder.getBody()[0]) * 12) / 16,
+						  (partHolder.getBody()[5] - sin(partHolder.getBody()[0]) * 12) / 16);
 		
 		customEntity.lmm_$setCapeRot(0,
 									 GeneralUtils.incrementUntilGoal(customEntity.lmm_$getCapeRot()[0],
-																	 MathHelper.clamp_float(angle, 0, 90),
+																	 MathHelper.clamp_float(angle + partHolder.getBody()[0] * 180 / pi, 0, 90),
 																	 0.5f * AnimationUtils.delta));
 		GL11.glRotatef(customEntity.lmm_$getCapeRot()[0], x, y, z);
 	}
@@ -53,6 +45,7 @@ public abstract class RenderPlayerMixin {
 	@Redirect(method = "renderSpecials", at = @At(value = "INVOKE", target = "Lorg/lwjgl/opengl/GL11;glRotatef(FFFF)V", ordinal = 6), remap = false)
 	private void rotateCapeZ(float angle, float x, float y, float z, AbstractClientPlayer player) {
 		ICustomMovementEntity customEntity = (ICustomMovementEntity) player;
+		
 		customEntity.lmm_$setCapeRot(1,
 									 GeneralUtils.incrementUntilGoal(customEntity.lmm_$getCapeRot()[1],
 																	 angle,
@@ -64,6 +57,7 @@ public abstract class RenderPlayerMixin {
 	@Redirect(method = "renderSpecials", at = @At(value = "INVOKE", target = "Lorg/lwjgl/opengl/GL11;glRotatef(FFFF)V", ordinal = 7), remap = false)
 	private void rotateCapeY(float angle, float x, float y, float z, AbstractClientPlayer player) {
 		ICustomMovementEntity customEntity = (ICustomMovementEntity) player;
+		
 		customEntity.lmm_$setCapeRot(2,
 									 GeneralUtils.incrementUntilGoal(customEntity.lmm_$getCapeRot()[2],
 																	 angle,

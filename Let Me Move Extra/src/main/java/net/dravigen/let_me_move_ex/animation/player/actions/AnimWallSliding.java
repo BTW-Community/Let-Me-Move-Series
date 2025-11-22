@@ -42,28 +42,18 @@ public class AnimWallSliding extends AnimBaseAction {
 		ICustomMovementEntity customEntity = (ICustomMovementEntity) entity;
 		ModelPartHolder partHolder = customEntity.lmm_$getParHolder();
 		
-		//partHolder.resetAnimationRotationPoints();
-		
-		float[] head = new float[]{0, 0, 0, 0, 0, 0};
+		float[] head = new float[]{0, 0, 0, 0, 1.5f, 0};
 		float[] body = new float[]{pi(1, 8), 0, 0, 0, 12, 0};
 		float[] rArm = new float[]{pi(1, 16), 0, pi(1, 6), -5, 2, 0};
 		float[] lArm = new float[]{0, 0, -pi(4, 5), 5, 2, 0};
 		float[] rLeg = new float[]{pi(1, 7), 0, -pi(1, 10), -1.9f, 12, 0.1f};
 		float[] lLeg = new float[]{0, 0, -pi(1, 5), 1.9f, 12, 0.1f};
 		
-		AnimationUtils.offsetAllRotationPoints(-4, 0, 0, head, rArm, lArm, rLeg, lLeg, body);
+		AnimationUtils.offsetAllRotationPoints(1, 0, 0, head, rArm, lArm, rLeg, lLeg, body);
 		
-		body[5] = sin(model.bipedBody.rotateAngleX) * 12;
-		head[4] += 1;
-		
-		rArm[3] += 1;
-		lArm[3] += 1;
-		
-		rArm[4] -= 2;
-		lArm[4] -= 2;
-		
-		rArm[5] += 4;
-		lArm[5] += 4;
+		head[5] -= sin(body[0]) * 12;
+		rArm[5] -= sin(body[0]) * 12 - 2;
+		lArm[5] -= sin(body[0]) * 12 - 2;
 		
 		breath(h, head, rArm, lArm, rLeg, lLeg, body);
 		

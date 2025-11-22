@@ -9,6 +9,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
@@ -67,5 +68,15 @@ public abstract class RenderPlayerMixin extends RendererLivingEntity {
 			
 			GL11.glTranslatef(GeneralUtils.sin(i) * v / 16, 0, -GeneralUtils.cos(i) * v / 16);
 		}
+	}
+	
+	@ModifyArg(method = "renderSpecials", at = @At(value = "INVOKE", target = "Lorg/lwjgl/opengl/GL11;glRotatef(FFFF)V", ordinal = 11), index = 0)
+	private float a(float angle) {
+		return 0;
+	}
+	
+	@ModifyArg(method = "renderSpecials", at = @At(value = "INVOKE", target = "Lorg/lwjgl/opengl/GL11;glTranslatef(FFF)V", ordinal = 6), index = 0)
+	private float b(float angle) {
+		return 2 / 16f;
 	}
 }

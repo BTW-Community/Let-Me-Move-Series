@@ -54,13 +54,17 @@ public class AnimCommon extends BaseAnimation {
 	}
 	
 	protected void eatFood(float h, EntityLivingBase player, float[] head, float[] rArm) {
-		if (player.isEating() && (player.getHeldItem().getItem() instanceof ItemFood)) {
+		if (player.getHeldItem() == null) return;
+		
+		EnumAction useAction = player.getHeldItem().getItem().getItemUseAction(player.getHeldItem());
+		
+		if (player.isEating() && (useAction == EnumAction.eat || useAction == EnumAction.drink)) {
 			head[0] = sin(h * 2) * pi(1, 32) + pi(1, 12);
 			head[1] = 0;
 			
 			head[2] += sin(h) * pi(1, 16);
 			
-			rArm[0] -= pi(8, 16);
+			rArm[0] -= pi(8, 18);
 			rArm[2] += pi(3, 16);
 			
 			rArm[4] += 2;

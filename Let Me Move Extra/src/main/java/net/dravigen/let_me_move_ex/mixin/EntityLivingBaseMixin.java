@@ -3,6 +3,7 @@ package net.dravigen.let_me_move_ex.mixin;
 import net.dravigen.dranimation_lib.interfaces.ICustomMovementEntity;
 import net.dravigen.dranimation_lib.utils.AnimationUtils;
 import net.dravigen.let_me_move.animation.player.poses.AnimHighFalling;
+import net.dravigen.let_me_move_ex.animation.player.actions.AnimDiving;
 import net.dravigen.let_me_move_ex.animation.player.actions.AnimRolling;
 import net.dravigen.let_me_move_ex.animation.player.actions.AnimSkyDiving;
 import net.dravigen.let_me_move_ex.animation.player.actions.AnimWallSliding;
@@ -58,7 +59,7 @@ public abstract class EntityLivingBaseMixin extends Entity implements ICustomMov
 				
 				return this.lmm_$getAnimation().speedModifier;
 			}
-			else if (this.lmm_$isAnimation(AnimSkyDiving.id)) {
+			else if (this.lmm_$isAnimation(AnimDiving.id)) {
 				if (this.motionY < 0) {
 					this.motionY *= 1.02;
 				}

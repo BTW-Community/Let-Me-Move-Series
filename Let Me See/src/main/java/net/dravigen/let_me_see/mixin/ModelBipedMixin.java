@@ -34,7 +34,7 @@ public abstract class ModelBipedMixin {
 				entity == mc.thePlayer &&
 				mc.gameSettings.thirdPersonView == 0 &&
 				!(mc.currentScreen instanceof GuiContainerCreative || mc.currentScreen instanceof GuiInventory)) {
-			this.bipedBody.showModel = entity.height > 1.4;
+			this.bipedBody.showModel = mc.thePlayer.isPlayerSleeping() || entity.height > 1.4;
 			this.bipedHead.showModel = false;
 			this.bipedHeadwear.showModel = false;
 			
