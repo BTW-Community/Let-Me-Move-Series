@@ -10,8 +10,7 @@
   ],
   "client": [
     "GuiInGameMixin",
-    "ModelBipedMixin",
-    "PlayerArmorModelMixin"
+    "ModelBipedMixin"
   ],
   "injectors": {
     "defaultRequire": 1

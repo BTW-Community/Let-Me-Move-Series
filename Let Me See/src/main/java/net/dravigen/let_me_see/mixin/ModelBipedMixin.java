@@ -1,5 +1,6 @@
 package net.dravigen.let_me_see.mixin;
 
+import btw.entity.model.PlayerArmorModel;
 import net.dravigen.dranimation_lib.interfaces.ICustomMovementEntity;
 import net.dravigen.let_me_see.config.LMS_Settings;
 import net.minecraft.src.*;
@@ -30,14 +31,22 @@ public abstract class ModelBipedMixin {
 	private void hideBasePart(Entity entity, float par2, float par3, float par4, float par5, float par6, float par7,
 			CallbackInfo ci) {
 		Minecraft mc = Minecraft.getMinecraft();
-		
-		if (LMS_Settings.FIRST_PERSON_MODEL.getBool() &&
+		boolean isFirstPers = LMS_Settings.FIRST_PERSON_MODEL.getBool() &&
 				entity == mc.thePlayer &&
 				mc.gameSettings.thirdPersonView == 0 &&
-				!(mc.currentScreen instanceof GuiContainerCreative || mc.currentScreen instanceof GuiInventory)) {
-			this.bipedBody.showModel = mc.thePlayer.isPlayerSleeping() || entity.height > 1.4 && !((ICustomMovementEntity)entity).lmm_$isAnimation(new ResourceLocation("LMM", "wallSliding"));
+				!(mc.currentScreen instanceof GuiContainerCreative || mc.currentScreen instanceof GuiInventory);
+		
+		if (isFirstPers) {
 			this.bipedHead.showModel = false;
 			this.bipedHeadwear.showModel = false;
+		}
+		
+		if ((Object) this instanceof PlayerArmorModel) {
+			return;
+		}
+		
+		if (isFirstPers) {
+			this.bipedBody.showModel = mc.thePlayer.isPlayerSleeping() || entity.height > 1.4 && !((ICustomMovementEntity)entity).lmm_$isAnimation(new ResourceLocation("LMM", "wallSliding"));
 			
 			ItemStack heldItem = mc.thePlayer.getHeldItem();
 			if (heldItem != null && (heldItem.itemID == Item.map.itemID)) {
