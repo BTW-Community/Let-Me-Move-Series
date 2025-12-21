@@ -9,6 +9,12 @@ public class ModelPartHolder {
 	float[] rLeg = new float[]{0, 0, 0, -1.9f, 12, 0.1f};
 	float[] lLeg = new float[]{0, 0, 0, 1.9f, 12, 0.1f};
 	
+	float[] prevHead = new float[]{0, 0, 0, 0, 0, 0};
+	float[] prevBody = new float[]{0, 0, 0, 0, 12, 0};
+	float[] prevRArm = new float[]{0, 0, 0, -5, 2, 0};
+	float[] prevLArm = new float[]{0, 0, 0, 5, 2, 0};
+	float[] prevRLeg = new float[]{0, 0, 0, -1.9f, 12, 0.1f};
+	float[] prevLLeg = new float[]{0, 0, 0, 1.9f, 12, 0.1f};
 	
 	public void resetAnimationRotationPoints() {
 		head = new float[]{head[0], head[1], head[2], 0, 0, 0};

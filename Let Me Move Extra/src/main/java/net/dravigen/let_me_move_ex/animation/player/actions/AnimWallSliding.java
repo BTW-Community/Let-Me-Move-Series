@@ -57,6 +57,8 @@ public class AnimWallSliding extends AnimBaseAction {
 		
 		breath(h, head, rArm, lArm, rLeg, lLeg, body);
 		
+		hurt(h, entity, head, body, rArm, lArm, rLeg, lLeg);
+		
 		float onGround = model.onGround;
 		if (!(onGround <= 0.0F)) {
 			body[1] = MathHelper.sin(MathHelper.sqrt_float(onGround) * (pi * 2)) * 0.05F;

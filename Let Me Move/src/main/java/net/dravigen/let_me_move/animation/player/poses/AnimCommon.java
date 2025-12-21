@@ -11,6 +11,7 @@ import static net.dravigen.dranimation_lib.utils.GeneralUtils.*;
 
 @SuppressWarnings("unused")
 public class AnimCommon extends BaseAnimation {
+	private boolean jumped = false;
 	public AnimCommon(ResourceLocation id, float height, float speedModifier, boolean needYOffsetUpdate,
 			int maxCooldown, int duration, boolean shouldAutoUpdate, float yOffset) {
 		super(id, height, speedModifier, needYOffsetUpdate, maxCooldown, duration, shouldAutoUpdate, yOffset);
@@ -156,6 +157,26 @@ public class AnimCommon extends BaseAnimation {
 		lLeg[3] += sin(v2) * 12;
 		lLeg[5] -= sin(v0) * 12;
 	}
+	
+	protected void hurt(float h, EntityLivingBase entity, float[] head, float[] body, float[] rArm, float[] lArm, float[] rLeg, float[] lLeg) {
+		if (entity.hurtTime >= 5) {
+			int hurt = entity.hurtTime - 5;
+			
+			float v = (sin(hurt * pi(1, 3)) + 1) * pi(1, 15);
+			float v1 = sin(hurt * pi(1, 2)) * pi(1, 10);
+			head[2] += v1;
+			body[1] += v1;
+			rArm[2] += v;
+			lArm[2] -= v;
+			
+			rArm[0] += v1;
+			lArm[0] -= v1;
+			
+			rLeg[1] -= v1;
+			lLeg[1] += v1;
+		}
+	}
+	
 	
 	@Override
 	public boolean isGeneralConditonsMet(EntityPlayer player, AxisAlignedBB axisAlignedBB) {
@@ -365,8 +386,8 @@ public class AnimCommon extends BaseAnimation {
 						lArm[0] = (float) (-jumpSwing * pi(1, 3) * (1 - motionY) * v1);
 						
 						float move = Math.max(Math.abs(forw), Math.abs(straf));
-						rLeg[0] = move * pi(1, 16) * (jumpSwing < 0 ? backward ? 0 : 3 : backward ? -2 : 2) * v;
-						lLeg[0] = move * pi(1, 16) * (-jumpSwing < 0 ? backward ? 0 : 3 : backward ? -2 : 2) * v;
+						rLeg[0] = move * pi(1, 32) * (jumpSwing < 0 ? backward ? 0 : 3 : backward ? -2 : 2) * v;
+						lLeg[0] = move * pi(1, 32) * (-jumpSwing < 0 ? backward ? 0 : 3 : backward ? -2 : 2) * v;
 						
 						rLeg[4] = (float) (12 - Math.max(0, jumpSwing * 2) * 2 * motYposRev * v1);
 						rLeg[5] = (float) (-Math.max(0, jumpSwing * 2) * g * 2 * motYposRev * v);
@@ -567,6 +588,8 @@ public class AnimCommon extends BaseAnimation {
 			lArm[0] = model.heldItemLeft != 0 ? lArm[0] * 0.5f - 0.31415927f * (float) model.heldItemLeft : lArm[0];
 		}
 		
+		this.hurt(h, player, head, body, rArm, lArm, rLeg, lLeg);
+		
 		this.eatFood(h, player, head, rArm);
 		
 		if (this.getID() == AnimGui.id) {
@@ -608,5 +631,16 @@ public class AnimCommon extends BaseAnimation {
 	@Override
 	public boolean customBodyHeadRotation(EntityLivingBase entity) {
 		return ((EntityPlayer) entity).capabilities.isFlying && !entity.isRiding();
+	}
+	
+	@Override
+	public String getName(EntityPlayer player) {
+		ICustomMovementEntity customEntity = (ICustomMovementEntity) player;
+		
+		if (!player.inWater && !customEntity.lmm_$getIsFlying() && !player.isRiding() && !customEntity.lmm_$getOnGround() && customEntity.lmm_$getJumpTime() > 0) {
+			return StatCollector.translateToLocal("LMM.animation.jumping");
+		}
+		
+		return super.getName(player);
 	}
 }

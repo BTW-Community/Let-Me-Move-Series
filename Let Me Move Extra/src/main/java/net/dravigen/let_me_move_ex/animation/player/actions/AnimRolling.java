@@ -72,6 +72,10 @@ public class AnimRolling extends AnimBaseAction {
 			head[1] = i * (pi / 180.0f);
 		}
 		
+		this.breath(h, head, rArm, lArm, rLeg, lLeg, body);
+		
+		this.hurt(h, entity, head, body, rArm, lArm, rLeg, lLeg);
+		
 		AnimationUtils.smoothRotateAll(partHolder.getHead(), head, 0.3f * delta, 0.7f * delta);
 		AnimationUtils.smoothRotateAll(partHolder.getBody(), body, 0.8f * delta, 0.7f * delta);
 		AnimationUtils.smoothRotateAll(partHolder.getrArm(), rArm, 0.3f * delta, 0.7f * delta);

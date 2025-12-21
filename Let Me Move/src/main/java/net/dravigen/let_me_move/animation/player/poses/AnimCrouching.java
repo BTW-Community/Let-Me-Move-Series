@@ -11,15 +11,6 @@ public class AnimCrouching extends AnimCommon {
 	}
 	
 	@Override
-	public String getName(EntityPlayer player) {
-		if (((ICustomMovementEntity) player).lmm_$getJumpTime() > 0) {
-			return StatCollector.translateToLocal("LMM.animation.jumping");
-		}
-		
-		return super.getName(player);
-	}
-	
-	@Override
 	public boolean isGeneralConditonsMet(EntityPlayer player, AxisAlignedBB axisAlignedBB) {
 		return true;
 	}

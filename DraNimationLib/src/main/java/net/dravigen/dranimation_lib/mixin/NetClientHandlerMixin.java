@@ -20,10 +20,10 @@ public abstract class NetClientHandlerMixin extends NetHandler {
 	@Inject(method = "handleCustomPayload", at = @At("HEAD"))
 	private void tu_onCustomPayloadC2S(Packet250CustomPayload packet, CallbackInfo ci) {
 		switch (packet.channel) {
-			case PacketUtils.ANIMATION_SYNC_CHANNEL -> PacketUtils.handleAnimationSync(packet, this.mc.thePlayer);
-			case PacketUtils.ANIMATION_DATA_SYNC_CHANNEL ->
+			case PacketUtils.ID_SYNC_CH -> PacketUtils.handleAnimationSync(packet, this.mc.thePlayer);
+			case PacketUtils.DATA_SYNC_CH ->
 					PacketUtils.handleAnimationDataToTrackingPlayer(packet, this.mc.renderViewEntity);
-			case PacketUtils.EXTRA_CHECK_CHANNEL -> PacketUtils.handleExtraIsPresent(packet);
+			case PacketUtils.EXTRA_CHECK_CH -> PacketUtils.handleExtraIsPresent(packet);
 		}
 	}
 }

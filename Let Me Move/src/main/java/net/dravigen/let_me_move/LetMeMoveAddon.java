@@ -1,9 +1,9 @@
 package net.dravigen.let_me_move;
 
-import btw.AddonHandler;
-import btw.BTWAddon;
-import btw.world.util.data.DataEntry;
-import btw.world.util.data.DataProvider;
+import api.AddonHandler;
+import api.BTWAddon;
+import api.world.data.DataEntry;
+import api.world.data.DataProvider;
 import net.dravigen.dranimation_lib.utils.AnimationUtils;
 import net.dravigen.let_me_move.animation.AnimRegistry;
 import net.dravigen.let_me_move.animation.player.poses.AnimStanding;

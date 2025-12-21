@@ -11,15 +11,6 @@ public class AnimRunning extends AnimCommon {
 	}
 	
 	@Override
-	public String getName(EntityPlayer player) {
-		if (((ICustomMovementEntity) player).lmm_$getJumpTime() > 0) {
-			return StatCollector.translateToLocal("LMM.animation.jumping");
-		}
-		
-		return super.getName(player);
-	}
-	
-	@Override
 	public boolean isGeneralConditonsMet(EntityPlayer player, AxisAlignedBB axisAlignedBB) {
 		return (player.moveForward != 0 || player.moveStrafing != 0) &&
 				player.isSprinting() &&

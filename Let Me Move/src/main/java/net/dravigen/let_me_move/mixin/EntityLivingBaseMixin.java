@@ -169,8 +169,8 @@ public abstract class EntityLivingBaseMixin extends Entity implements ICustomMov
 	}
 	
 	@Override
-	public void lmm_$setJumpSwing(int jumpSwing) {
-		this.jumpSwing = jumpSwing;
+	public void lmm_$setJumpSwing() {
+		this.jumpSwing = -this.jumpSwing;
 	}
 	
 	@Override

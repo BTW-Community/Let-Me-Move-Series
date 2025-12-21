@@ -11,10 +11,10 @@ import java.util.Map;
 
 @SuppressWarnings("unused")
 public class PacketUtils {
-	public static final String ANIMATION_SYNC_CHANNEL = "LMM:AnimIDSync";
-	public static final String ANIMATION_DATA_SYNC_CHANNEL = "LMM:AnimDataSync";
-	public static final String HUNGER_EXHAUSTION_CHANNEL = "LMM:Exhaustion";
-	public static final String EXTRA_CHECK_CHANNEL = "LMM:CheckExtra";
+	public static final String ID_SYNC_CH = "LMM:IdSync";
+	public static final String DATA_SYNC_CH = "LMM:DataSync";
+	public static final String EXHAUSTION_CH = "LMM:Exhaustion";
+	public static final String EXTRA_CHECK_CH = "LMM:extra";
 	
 	public static void animationStoCSync(ResourceLocation ID, NetServerHandler serverHandler) {
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -27,7 +27,7 @@ public class PacketUtils {
 			throw new RuntimeException(e);
 		}
 		
-		Packet250CustomPayload packet = new Packet250CustomPayload(ANIMATION_SYNC_CHANNEL, bos.toByteArray());
+		Packet250CustomPayload packet = new Packet250CustomPayload(ID_SYNC_CH, bos.toByteArray());
 		
 		serverHandler.sendPacket(packet);
 	}
@@ -44,7 +44,7 @@ public class PacketUtils {
 			throw new RuntimeException(e);
 		}
 		
-		Packet250CustomPayload packet = new Packet250CustomPayload(ANIMATION_SYNC_CHANNEL, bos.toByteArray());
+		Packet250CustomPayload packet = new Packet250CustomPayload(ID_SYNC_CH, bos.toByteArray());
 		
 		Minecraft.getMinecraft().getNetHandler().addToSendQueue(packet);
 	}
@@ -74,7 +74,7 @@ public class PacketUtils {
 			throw new RuntimeException(e);
 		}
 		
-		Packet250CustomPayload packet = new Packet250CustomPayload(HUNGER_EXHAUSTION_CHANNEL, bos.toByteArray());
+		Packet250CustomPayload packet = new Packet250CustomPayload(EXHAUSTION_CH, bos.toByteArray());
 		
 		Minecraft.getMinecraft().getNetHandler().addToSendQueue(packet);
 	}
@@ -129,7 +129,7 @@ public class PacketUtils {
 			throw new RuntimeException(e);
 		}
 		
-		Packet250CustomPayload packet = new Packet250CustomPayload(ANIMATION_DATA_SYNC_CHANNEL, bos.toByteArray());
+		Packet250CustomPayload packet = new Packet250CustomPayload(DATA_SYNC_CH, bos.toByteArray());
 		
 		Minecraft.getMinecraft().getNetHandler().addToSendQueue(packet);
 	}
@@ -215,7 +215,7 @@ public class PacketUtils {
 				throw new RuntimeException(e);
 			}
 			
-			Packet250CustomPayload packet = new Packet250CustomPayload(ANIMATION_DATA_SYNC_CHANNEL, bos.toByteArray());
+			Packet250CustomPayload packet = new Packet250CustomPayload(DATA_SYNC_CH, bos.toByteArray());
 			
 			player.getServerForPlayer().getEntityTracker().sendPacketToAllAssociatedPlayers(player, packet);
 		}
@@ -247,6 +247,11 @@ public class PacketUtils {
 				customPlayer.lmm_$setAnimationFromSync(ID);
 				customPlayer.lmm_$setLeaningPitch(leaningPitch);
 				customPlayer.lmm_$setTimeRendered(timeRendered);
+				
+				if (customPlayer.lmm_$getOnGround() && !onGround) {
+					customPlayer.lmm_$setJumpSwing();
+				}
+				
 				customPlayer.lmm_$setOnGround(onGround);
 				customPlayer.lmm_$setIsFlying(isFlying);
 				customPlayer.lmm_$setLimbSwing(limbs);
@@ -278,7 +283,7 @@ public class PacketUtils {
 			throw new RuntimeException(e);
 		}
 		
-		Packet250CustomPayload packet = new Packet250CustomPayload(EXTRA_CHECK_CHANNEL, bos.toByteArray());
+		Packet250CustomPayload packet = new Packet250CustomPayload(EXTRA_CHECK_CH, bos.toByteArray());
 		
 		player.playerNetServerHandler.sendPacketToPlayer(packet);
 	}

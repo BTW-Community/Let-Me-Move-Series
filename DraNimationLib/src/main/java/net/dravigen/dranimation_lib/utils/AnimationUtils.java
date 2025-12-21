@@ -76,12 +76,12 @@ public class AnimationUtils {
 	public static void updateAnimationRotation(ModelPartHolder partHolder, ModelBiped model) {
 		float deltaTick = AnimationUtils.delta;
 		
-		lerpModelPart(model.bipedHead, partHolder.head, deltaTick);
-		lerpModelPart(model.bipedBody, partHolder.body, deltaTick);
-		lerpModelPart(model.bipedRightArm, partHolder.rArm, deltaTick);
-		lerpModelPart(model.bipedLeftArm, partHolder.lArm, deltaTick);
-		lerpModelPart(model.bipedRightLeg, partHolder.rLeg, deltaTick);
-		lerpModelPart(model.bipedLeftLeg, partHolder.lLeg, deltaTick);
+		lerpModelPart(model.bipedHead, partHolder.head, partHolder.prevHead, deltaTick);
+		lerpModelPart(model.bipedBody, partHolder.body, partHolder.prevBody, deltaTick);
+		lerpModelPart(model.bipedRightArm, partHolder.rArm, partHolder.prevRArm, deltaTick);
+		lerpModelPart(model.bipedLeftArm, partHolder.lArm, partHolder.prevLArm, deltaTick);
+		lerpModelPart(model.bipedRightLeg, partHolder.rLeg, partHolder.prevRLeg, deltaTick);
+		lerpModelPart(model.bipedLeftLeg, partHolder.lLeg, partHolder.prevLLeg, deltaTick);
 		
 		syncHeadwear(model);
 	}
@@ -95,14 +95,21 @@ public class AnimationUtils {
 		model.bipedHeadwear.rotationPointZ = model.bipedHead.rotationPointZ;
 	}
 	
-	private static void lerpModelPart(ModelRenderer renderer, float[] targets, float delta) {
-		renderer.rotateAngleX = GeneralUtils.lerpF(delta, renderer.rotateAngleX, targets[0]);
-		renderer.rotateAngleY = GeneralUtils.lerpF(delta, renderer.rotateAngleY, targets[1]);
-		renderer.rotateAngleZ = GeneralUtils.lerpF(delta, renderer.rotateAngleZ, targets[2]);
+	private static void lerpModelPart(ModelRenderer renderer, float[] targets, float[] prev, float delta) {
+		renderer.rotateAngleX = GeneralUtils.lerpF(delta, prev[0], targets[0]);
+		renderer.rotateAngleY = GeneralUtils.lerpF(delta, prev[1], targets[1]);
+		renderer.rotateAngleZ = GeneralUtils.lerpF(delta, prev[2], targets[2]);
 		
-		renderer.rotationPointX = GeneralUtils.lerpF(delta, renderer.rotationPointX, targets[3]);
-		renderer.rotationPointY = GeneralUtils.lerpF(delta, renderer.rotationPointY, targets[4]);
-		renderer.rotationPointZ = GeneralUtils.lerpF(delta, renderer.rotationPointZ, targets[5]);
+		renderer.rotationPointX = GeneralUtils.lerpF(delta, prev[3], targets[3]);
+		renderer.rotationPointY = GeneralUtils.lerpF(delta, prev[4], targets[4]);
+		renderer.rotationPointZ = GeneralUtils.lerpF(delta, prev[5], targets[5]);
+		
+		prev[0] = renderer.rotateAngleX;
+		prev[1] = renderer.rotateAngleY;
+		prev[2] = renderer.rotateAngleZ;
+		prev[3] = renderer.rotationPointX;
+		prev[4] = renderer.rotationPointY;
+		prev[5] = renderer.rotationPointZ;
 	}
 	
 	public static void offsetAllRotationPoints(float x, float y, float z, float[] head, float[] rArm, float[] lArm,

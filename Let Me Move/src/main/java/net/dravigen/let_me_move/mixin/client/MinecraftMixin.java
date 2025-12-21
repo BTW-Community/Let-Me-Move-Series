@@ -2,7 +2,6 @@ package net.dravigen.let_me_move.mixin.client;
 
 import net.dravigen.dranimation_lib.utils.AnimationUtils;
 import net.dravigen.dranimation_lib.utils.GeneralUtils;
-import net.dravigen.let_me_move.LetMeMoveAddon;
 import net.minecraft.src.*;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;

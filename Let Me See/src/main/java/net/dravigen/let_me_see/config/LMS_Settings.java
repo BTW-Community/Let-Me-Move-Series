@@ -67,7 +67,7 @@ public class LMS_Settings {
 														   16,
 														   "Handles jumping head's movement",
 														   category);
-	
+		
 		CAMERA_MULTIPLIER = DVS_ConfigManager.registerDouble("cameraMoveMul",
 															 "Camera Movement Multiplier",
 															 1.0,

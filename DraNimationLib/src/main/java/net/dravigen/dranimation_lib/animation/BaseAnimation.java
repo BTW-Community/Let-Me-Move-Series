@@ -1,6 +1,6 @@
 package net.dravigen.dranimation_lib.animation;
 
-import btw.world.util.difficulty.DifficultyParam;
+import api.world.difficulty.DifficultyParam;
 import net.dravigen.dranimation_lib.interfaces.ICustomMovementEntity;
 import net.minecraft.src.*;
 

@@ -55,6 +55,10 @@ public abstract class EntityPlayerSPMixin extends AbstractClientPlayer {
 			customPlayer.lmm_$setAnimation(newID);
 		}
 		
+		if (customPlayer.lmm_$getOnGround() && !this.onGround) {
+			customPlayer.lmm_$setJumpSwing();
+		}
+		
 		customPlayer.lmm_$setOnGround(this.onGround);
 		customPlayer.lmm_$setIsFlying(this.capabilities.isFlying);
 		

@@ -18,10 +18,10 @@ public class NetServerHandlerMixin {
 	@Inject(method = "handleCustomPayload", at = @At("HEAD"))
 	private void tu_onCustomPayloadC2S(Packet250CustomPayload packet, CallbackInfo ci) {
 		switch (packet.channel) {
-			case PacketUtils.ANIMATION_SYNC_CHANNEL -> PacketUtils.handleAnimationSync(packet, this.playerEntity);
-			case PacketUtils.HUNGER_EXHAUSTION_CHANNEL ->
+			case PacketUtils.ID_SYNC_CH -> PacketUtils.handleAnimationSync(packet, this.playerEntity);
+			case PacketUtils.EXHAUSTION_CH ->
 					PacketUtils.handleExhaustionFromClient(packet, this.playerEntity);
-			case PacketUtils.ANIMATION_DATA_SYNC_CHANNEL ->
+			case PacketUtils.DATA_SYNC_CH ->
 					PacketUtils.handleAnimationDataOnServer(packet, this.playerEntity);
 		}
 	}

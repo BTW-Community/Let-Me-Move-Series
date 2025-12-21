@@ -1,6 +1,5 @@
 package net.dravigen.let_me_move.animation.player.poses;
 
-import net.dravigen.dranimation_lib.interfaces.ICustomMovementEntity;
 import net.minecraft.src.*;
 
 public class AnimWalking extends AnimCommon {
@@ -8,15 +7,6 @@ public class AnimWalking extends AnimCommon {
 	
 	public AnimWalking() {
 		super(id);
-	}
-	
-	@Override
-	public String getName(EntityPlayer player) {
-		if (((ICustomMovementEntity) player).lmm_$getJumpTime() > 0) {
-			return StatCollector.translateToLocal("LMM.animation.jumping");
-		}
-		
-		return super.getName(player);
 	}
 	
 	@Override

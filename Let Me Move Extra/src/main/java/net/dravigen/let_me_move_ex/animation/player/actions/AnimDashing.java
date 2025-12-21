@@ -63,6 +63,10 @@ public class AnimDashing extends AnimBaseAction {
 		float[] rLeg = new float[]{pi * 0.25f, 0, straf * -pi * 0.125f, -1.9f, 12, 0.1f};
 		float[] lLeg = new float[]{pi * 0.25f, 0, straf * -pi * 0.125f, 1.9f, 12, 0.1f};
 		
+		this.moveAround(h, head, rArm, lArm, rLeg, lLeg, body);
+		
+		this.hurt(h, entity, head, body, rArm, lArm, rLeg, lLeg);
+
 		AnimationUtils.smoothRotateAll(partHolder.getBody(), body, 0.3f * delta, 0.7f * delta);
 		AnimationUtils.smoothRotateAll(partHolder.getHead(), head, 0.8f * delta, 0.7f * delta);
 		AnimationUtils.smoothRotateAll(partHolder.getrArm(), rArm, 0.3f * delta, 0.7f * delta);

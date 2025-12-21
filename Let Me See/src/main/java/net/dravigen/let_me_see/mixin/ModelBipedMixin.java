@@ -1,5 +1,6 @@
 package net.dravigen.let_me_see.mixin;
 
+import api.AddonHandler;
 import btw.entity.model.PlayerArmorModel;
 import net.dravigen.dranimation_lib.interfaces.ICustomMovementEntity;
 import net.dravigen.let_me_see.config.LMS_Settings;
@@ -44,15 +45,19 @@ public abstract class ModelBipedMixin {
 		boolean hasChest = mc.thePlayer.getCurrentArmor(2) != null;
 		
 		if (isFirstPers) {
-			boolean shouldHideChest = mc.thePlayer.isPlayerSleeping() ||
-					entity.height > 1.4 &&
-							!((ICustomMovementEntity) entity).lmm_$isAnimation(new ResourceLocation("LMM",
-																									"wallSliding"));
+			boolean isSliding = false;
+			
+			if (AddonHandler.isModInstalled("let_me_move")) {
+				isSliding = ((ICustomMovementEntity) entity).lmm_$isAnimation(new ResourceLocation("LMM",
+																								   "wallSliding"));
+			}
+			
+			boolean showChest = mc.thePlayer.isPlayerSleeping() || entity.height > 1.4 && !isSliding;
 			if (isArmor) {
-				this.bipedBody.showModel = hasChest && (shouldHideChest);
+				this.bipedBody.showModel = hasChest && (showChest);
 			}
 			else {
-				this.bipedBody.showModel = shouldHideChest;
+				this.bipedBody.showModel = showChest;
 			}
 			
 			ItemStack heldItem = mc.thePlayer.getHeldItem();

@@ -13,8 +13,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import static net.dravigen.dranimation_lib.utils.GeneralUtils.incrementUntilGoal;
-
 @Mixin(EntityRenderer.class)
 public abstract class EntityRendererMixin {
 	@Unique
@@ -28,6 +26,14 @@ public abstract class EntityRendererMixin {
 	@Shadow
 	private Minecraft mc;
 	
+	@Unique
+	private static float incrementUntilGoal(float currentValue, float goalValue, float easeFactor) {
+		float difference = goalValue - currentValue;
+		
+		float stepSize = difference * easeFactor;
+		
+		return currentValue + stepSize;
+	}
 	
 	@Redirect(method = "setupViewBobbing", at = @At(value = "INVOKE", target = "Lorg/lwjgl/opengl/GL11;glRotatef(FFFF)V", ordinal = 0))
 	private void customBobbingRoll(float angle, float x, float y, float z) {
@@ -48,7 +54,7 @@ public abstract class EntityRendererMixin {
 											   player.prevSwingProgress,
 											   player.swingProgress) +
 					(0.5 * (player.rotationYaw - prevYaw)) * cameraMul);
-		
+			
 			float factor = player.moveStrafing == 0 || player.rotationYaw - prevYaw == 0 ? 0.25f : 0.005f;
 			
 			prevYaw = player.rotationYaw;
@@ -99,14 +105,5 @@ public abstract class EntityRendererMixin {
 		if (LMS_Settings.FIRST_PERSON_MODEL.getBool() && !holdingSpecialItem) {
 			ci.cancel();
 		}
-	}
-	
-	@Unique
-	private static float incrementUntilGoal(float currentValue, float goalValue, float easeFactor) {
-		float difference = goalValue - currentValue;
-		
-		float stepSize = difference * easeFactor;
-		
-		return currentValue + stepSize;
 	}
 }

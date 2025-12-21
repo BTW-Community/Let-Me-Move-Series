@@ -1,6 +1,6 @@
 package net.dravigen.let_me_see.mixin;
 
-import btw.client.texture.CustomUpdatingTexture;
+import api.client.CustomUpdatingTexture;
 import net.dravigen.dranimation_lib.utils.GeneralUtils;
 import net.dravigen.let_me_see.config.LMS_Settings;
 import net.minecraft.src.*;

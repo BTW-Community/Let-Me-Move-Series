@@ -36,7 +36,7 @@ public interface ICustomMovementEntity {
 	
 	int lmm_$getPrevJumpTime();
 	
-	void lmm_$setJumpSwing(int jumpSwing);
+	void lmm_$setJumpSwing();
 	
 	int lmm_$getJumpSwing();
 	

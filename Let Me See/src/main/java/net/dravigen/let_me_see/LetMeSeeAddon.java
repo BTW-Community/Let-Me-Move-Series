@@ -1,7 +1,7 @@
 package net.dravigen.let_me_see;
 
-import btw.AddonHandler;
-import btw.BTWAddon;
+import api.AddonHandler;
+import api.BTWAddon;
 import net.dravigen.dranimation_lib.settings.DVS_ConfigManager;
 import net.dravigen.let_me_see.config.LMS_Settings;
 

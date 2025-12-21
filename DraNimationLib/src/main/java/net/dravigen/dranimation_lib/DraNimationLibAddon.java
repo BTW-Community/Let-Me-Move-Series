@@ -1,7 +1,7 @@
 package net.dravigen.dranimation_lib;
 
-import btw.AddonHandler;
-import btw.BTWAddon;
+import api.AddonHandler;
+import api.BTWAddon;
 
 public class DraNimationLibAddon extends BTWAddon {
 	public DraNimationLibAddon() {

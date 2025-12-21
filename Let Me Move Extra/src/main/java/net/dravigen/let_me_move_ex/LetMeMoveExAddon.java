@@ -1,7 +1,7 @@
 package net.dravigen.let_me_move_ex;
 
-import btw.AddonHandler;
-import btw.BTWAddon;
+import api.AddonHandler;
+import api.BTWAddon;
 import net.dravigen.dranimation_lib.settings.DVS_ConfigManager;
 import net.dravigen.dranimation_lib.utils.AnimationUtils;
 import net.dravigen.let_me_move_ex.animation.AnimRegistry;

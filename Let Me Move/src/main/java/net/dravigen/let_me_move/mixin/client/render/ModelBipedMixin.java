@@ -33,33 +33,7 @@ public abstract class ModelBipedMixin extends ModelBase {
 		
 		ICustomMovementEntity customEntity = (ICustomMovementEntity) player;
 		
-		if (!entity.onGround) {
-			List boundingBoxes = player.worldObj.getCollidingBoundingBoxes(player,
-																		   new AxisAlignedBB(player.posX -
-																									 player.width / 2,
-																							 player.boundingBox.minY -
-																									 0.1,
-																							 player.posZ -
-																									 player.width / 2,
-																							 player.posX +
-																									 player.width / 2,
-																							 player.boundingBox.minY,
-																							 player.posZ +
-																									 player.width / 2));
-			customEntity.lmm_$setOnGround(!boundingBoxes.isEmpty());
-		}
-		
 		if (!customEntity.lmm_$getOnGround() && !customEntity.lmm_$getIsFlying() && !this.isRiding) {
-			if (player.posY > player.prevPosY) {
-				if (customEntity.lmm_$getPrevJumpTime() == -1) {
-					customEntity.lmm_$setPrevJumpTime(0);
-					customEntity.lmm_$setJumpSwing(customEntity.lmm_$getJumpSwing() * -1);
-				}
-			}
-			else {
-				customEntity.lmm_$setPrevJumpTime(-1);
-			}
-			
 			customEntity.lmm_$setJumpTime(customEntity.lmm_$getJumpTime() + 1);
 		}
 		else {

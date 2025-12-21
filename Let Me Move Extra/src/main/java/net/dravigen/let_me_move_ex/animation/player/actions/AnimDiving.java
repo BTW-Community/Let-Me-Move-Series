@@ -73,6 +73,10 @@ public class AnimDiving extends AnimBaseAction {
 		float[] rLeg = new float[]{-1f + n / 2, 0, 0, -1.9f, 12, 0.1f};
 		float[] lLeg = new float[]{-1f + n / 2, 0, 0, 1.9f, 12, 0.1f};
 		
+		this.breath(h, head, rArm, lArm, rLeg, lLeg, body);
+		
+		this.hurt(h, entity, head, body, rArm, lArm, rLeg, lLeg);
+		
 		AnimationUtils.smoothRotateAll(partHolder.getHead(), head, 0.3f * delta, 0.8f * delta);
 		AnimationUtils.smoothRotateAll(partHolder.getBody(), body, 0.8f * delta, 0.8f * delta);
 		
