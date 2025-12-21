@@ -29,6 +29,22 @@ public abstract class ModelBipedMixin extends ModelBase {
 		
 		ICustomMovementEntity customEntity = (ICustomMovementEntity) player;
 		
+		{
+			if (player != Minecraft.getMinecraft().thePlayer) {
+				if (!entity.isRiding() && !entity.inWater) {
+					boolean onGround = player.worldObj.checkBlockCollision(player.boundingBox.copy().offset(0, -0.001f, 0));
+					
+					if (customEntity.lmm_$getOnGround() && !onGround) {
+						customEntity.lmm_$setJumpSwing();
+					}
+					customEntity.lmm_$setOnGround(onGround);
+				}
+				else {
+					customEntity.lmm_$setOnGround(true);
+				}
+			}
+		}
+		
 		if (!customEntity.lmm_$getOnGround() && !customEntity.lmm_$getIsFlying() && !this.isRiding) {
 			customEntity.lmm_$setJumpTime(customEntity.lmm_$getJumpTime() + 1);
 		}

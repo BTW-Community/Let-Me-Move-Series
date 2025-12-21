@@ -16,6 +16,7 @@ public class AnimationUtils {
 	private static final Map<ResourceLocation, BaseAnimation> animationsMap = new HashMap<>();
 	public static float delta = 1;
 	public static boolean extraIsPresent = false;
+	public static boolean serverHasLMM = false;
 	
 	public static Map<ResourceLocation, BaseAnimation> getAnimationsMap() {
 		return animationsMap.entrySet()

@@ -25,6 +25,10 @@ public class LetMeMoveAddon extends BTWAddon {
 		return AddonHandler.isModInstalled("let_me_move_ex") && AnimationUtils.extraIsPresent;
 	}
 	
+	public static boolean serverHasLetMeMove() {
+		return AnimationUtils.serverHasLMM;
+	}
+	
 	@Override
 	public void preInitialize() {
 		CURRENT_ANIMATION.register();

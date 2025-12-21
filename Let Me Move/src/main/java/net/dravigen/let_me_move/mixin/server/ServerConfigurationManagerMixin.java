@@ -16,6 +16,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(ServerConfigurationManager.class)
 public abstract class ServerConfigurationManagerMixin {
 	
+	@Inject(method = "playerLoggedIn", at = @At("HEAD"))
+	private void playerLogIn(EntityPlayerMP player, CallbackInfo ci) {
+		PacketUtils.sendLMMIsPresent(player, true);
+	}
+
 	@Unique
 	private static ResourceLocation getDataID(EntityPlayerMP player) {
 		String[] s = player.getData(LetMeMoveAddon.CURRENT_ANIMATION).split(":");

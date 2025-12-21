@@ -15,6 +15,7 @@ public class PacketUtils {
 	public static final String DATA_SYNC_CH = "LMM:DataSync";
 	public static final String EXHAUSTION_CH = "LMM:Exhaustion";
 	public static final String EXTRA_CHECK_CH = "LMM:extra";
+	public static final String LMM_CHECK_CH = "LMM:checkLMM";
 	
 	public static void animationStoCSync(ResourceLocation ID, NetServerHandler serverHandler) {
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -247,14 +248,9 @@ public class PacketUtils {
 				customPlayer.lmm_$setAnimationFromSync(ID);
 				customPlayer.lmm_$setLeaningPitch(leaningPitch);
 				customPlayer.lmm_$setTimeRendered(timeRendered);
-				
-				if (customPlayer.lmm_$getOnGround() && !onGround) {
-					customPlayer.lmm_$setJumpSwing();
-				}
-				
-				customPlayer.lmm_$setOnGround(onGround);
 				customPlayer.lmm_$setIsFlying(isFlying);
 				customPlayer.lmm_$setLimbSwing(limbs);
+				customPlayer.lmm_$setOnGround(onGround);
 				
 				for (int i = 0; i < Short.MAX_VALUE; i++) {
 					try {
@@ -300,6 +296,32 @@ public class PacketUtils {
 		}
 	}
 	
+	public static void sendLMMIsPresent(EntityPlayerMP player, boolean present) {
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		DataOutputStream dos = new DataOutputStream(bos);
+		
+		try {
+			dos.writeBoolean(present);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+		
+		Packet250CustomPayload packet = new Packet250CustomPayload(LMM_CHECK_CH, bos.toByteArray());
+		
+		player.playerNetServerHandler.sendPacketToPlayer(packet);
+	}
+	
+	@Environment(EnvType.CLIENT)
+	public static void handleLMMIsPresent(Packet250CustomPayload packet) {
+		try {
+			ByteArrayInputStream bis = new ByteArrayInputStream(packet.data);
+			DataInputStream dis = new DataInputStream(bis);
+			
+			AnimationUtils.serverHasLMM = dis.readBoolean();
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
 	
 	@Environment(EnvType.CLIENT)
 	private static Entity getEntityByID(int par1) {

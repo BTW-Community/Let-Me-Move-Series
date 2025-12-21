@@ -24,6 +24,7 @@ public abstract class NetClientHandlerMixin extends NetHandler {
 			case PacketUtils.DATA_SYNC_CH ->
 					PacketUtils.handleAnimationDataToTrackingPlayer(packet, this.mc.renderViewEntity);
 			case PacketUtils.EXTRA_CHECK_CH -> PacketUtils.handleExtraIsPresent(packet);
+			case PacketUtils.LMM_CHECK_CH -> PacketUtils.handleLMMIsPresent(packet);
 		}
 	}
 }
