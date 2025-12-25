@@ -1,5 +1,7 @@
 package net.dravigen.let_me_move.animation.player.poses;
 
+import api.item.items.ProgressiveCraftingItem;
+import btw.item.items.FoodItem;
 import net.dravigen.dranimation_lib.animation.BaseAnimation;
 import net.dravigen.dranimation_lib.interfaces.ICustomMovementEntity;
 import net.dravigen.dranimation_lib.utils.AnimationUtils;
@@ -56,20 +58,32 @@ public class AnimCommon extends BaseAnimation {
 	}
 	
 	protected void eatFood(float h, EntityLivingBase player, float[] head, float[] rArm) {
-		if (player.getHeldItem() == null) return;
+		ItemStack heldItem = player.getHeldItem();
 		
-		EnumAction useAction = player.getHeldItem().getItem().getItemUseAction(player.getHeldItem());
+		if (heldItem == null || !(heldItem.getItem() instanceof FoodItem || heldItem.getItem() instanceof ItemPotion || heldItem.getItem() instanceof ProgressiveCraftingItem)) return;
 		
-		if (player.isEating() && (useAction == EnumAction.eat || useAction == EnumAction.drink)) {
-			head[0] = sin(h * 2) * pi(1, 32) + pi(1, 12);
-			head[1] = 0;
-			
+		if (player.isEating()) {
+			head[0] += sin(h * 2) * pi(1, 32);
 			head[2] += sin(h) * pi(1, 16);
 			
-			rArm[0] -= pi(8, 18);
-			rArm[2] += pi(3, 16);
+			/*
+			rArm[0] -= pi(1, 2) - Math.max(head[0] * 0.25f, pi(1, 8));
+			rArm[1] += head[1] * 0.5f;
+			rArm[2] += cos(rArm[0] + pi(1, 2)) * pi(3, 16);*/
 			
-			rArm[4] += 2;
+			rArm[0] = -pi(1, 2) + head[0] * 0.5f;
+			rArm[1] = -0.1f + head[1];
+			rArm[2] = 0;
+			
+			rArm[2] += MathHelper.cos(h * 0.09f) * 0.05f + 0.05f;
+			rArm[0] += MathHelper.sin(h * 0.067f) * 0.05f;
+			
+			rArm[1] = rArm[2] + (-pi(1, 4) * (float) Math.cos(rArm[0]));
+			rArm[2] = (-pi(1, 4) * (float) Math.sin(rArm[0]));
+			rArm[1] += head[1] * 0.75f;
+			rArm[0] += rArm[1] * 0.5f;
+			
+			//rArm[4] += 2;
 			rArm[5] += 1;
 		}
 	}
@@ -226,23 +240,29 @@ public class AnimCommon extends BaseAnimation {
 		
 		float k = 1;
 		
-		MovementType movementType = GeneralUtils.getRelativeMovement(player);
+		EntityPlayer mcPlayer = Minecraft.getMinecraft().thePlayer;
+		
+		boolean isClient = player == mcPlayer;
 		
 		boolean isFloating = player.inWater && !player.onGround;
-		double motionY = player.posY - player.lastTickPosY;
+		double motionY = isClient ? mcPlayer.motionY : player.posY - player.lastTickPosY;
 		boolean isJumping = customEntity.lmm_$getJumpTime() > 0 && !player.inWater;
 		boolean isCrouching = model.isSneak || customEntity.lmm_$isAnimation(AnimCrouching.id);
-		boolean isFlying = customEntity.lmm_$getIsFlying() && !player.isRiding();
-		float forw = GeneralUtils.getMovementComponents(player)[0];
-		float straf = GeneralUtils.getMovementComponents(player)[1];
-		forw = forw > 0 ? forw < 0.2 ? 0 : forw : forw > -0.2 ? 0 : forw;
-		straf = straf > 0 ? straf < 0.2 ? 0 : straf : straf > -0.2 ? 0 : straf;
-		boolean bSprint = player.isSprinting();
-		boolean backward = movementType == MovementType.BACKWARD && straf == 0;
-		int jumpSwing = customEntity.lmm_$getJumpSwing();
-		boolean isMoving = g > 0.01;
+		boolean isFlying = isClient ? mcPlayer.capabilities.isFlying : customEntity.lmm_$getIsFlying() && !player.isRiding();
+		float forw = isClient ? mcPlayer.moveForward : GeneralUtils.getMovementComponents(player)[0];
+		float straf = isClient ? mcPlayer.moveStrafing : GeneralUtils.getMovementComponents(player)[1];
 		
-		if (entity == Minecraft.getMinecraft().thePlayer && !entity.isRiding()) {
+		if (!isClient) {
+			forw = forw > 0 ? forw < 0.2 ? 0 : forw : forw > -0.2 ? 0 : forw;
+			straf = straf > 0 ? straf < 0.2 ? 0 : straf : straf > -0.2 ? 0 : straf;
+		}
+		
+		boolean bSprint = player.isSprinting();
+		boolean backward = isClient ? forw < 0 : GeneralUtils.getRelativeMovement(player) == MovementType.BACKWARD && straf == 0;
+		int jumpSwing = customEntity.lmm_$getJumpSwing();
+		boolean isMoving = isClient ? mcPlayer.moveForward != 0 || mcPlayer.moveStrafing != 0 : g > 0.01;
+		
+		if (isClient && !entity.isRiding()) {
 			float yaw;
 			
 			if (isFlying) {

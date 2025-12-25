@@ -53,7 +53,8 @@ public abstract class EntityRendererMixin {
 							GeneralUtils.lerpF(mc.getTimer().renderPartialTicks,
 											   player.prevSwingProgress,
 											   player.swingProgress) +
-					(0.5 * (player.rotationYaw - prevYaw)) * cameraMul);
+					(0.5 * (player.rotationYaw - prevYaw)) * cameraMul +
+					(player.isEating() ? 1.5f * GeneralUtils.cos(player.ticksExisted) : 0));
 			
 			float factor = player.moveStrafing == 0 || player.rotationYaw - prevYaw == 0 ? 0.25f : 0.005f;
 			
