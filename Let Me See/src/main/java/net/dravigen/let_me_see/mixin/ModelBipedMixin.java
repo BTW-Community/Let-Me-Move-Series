@@ -3,7 +3,7 @@ package net.dravigen.let_me_see.mixin;
 import api.AddonHandler;
 import btw.entity.model.PlayerArmorModel;
 import net.dravigen.dranimation_lib.interfaces.ICustomMovementEntity;
-import net.dravigen.let_me_see.config.LMS_Settings;
+import net.dravigen.let_me_see.LetMeSeeAddon;
 import net.minecraft.src.*;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -50,9 +50,7 @@ public abstract class ModelBipedMixin {
 		
 		if (entity != mc.thePlayer) return;
 		
-		boolean isFirstPers = LMS_Settings.FIRST_PERSON_MODEL.getBool() &&
-				mc.gameSettings.thirdPersonView == 0 &&
-				!(mc.currentScreen instanceof GuiContainerCreative || mc.currentScreen instanceof GuiInventory);
+		boolean isFirstPers = LetMeSeeAddon.isIsCustomFirstPerson(mc);
 		
 		if (isFirstPers) {
 			this.bipedHead.showModel = false;

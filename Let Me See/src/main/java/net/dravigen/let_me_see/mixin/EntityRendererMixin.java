@@ -4,6 +4,7 @@ import api.item.items.ProgressiveCraftingItem;
 import btw.item.items.FoodItem;
 import net.dravigen.dranimation_lib.utils.AnimationUtils;
 import net.dravigen.dranimation_lib.utils.GeneralUtils;
+import net.dravigen.let_me_see.LetMeSeeAddon;
 import net.dravigen.let_me_see.config.LMS_Settings;
 import net.minecraft.src.*;
 import org.lwjgl.opengl.GL11;
@@ -113,7 +114,7 @@ public abstract class EntityRendererMixin {
 		
 		boolean holdingSpecialItem = item != null && item.itemID == Item.map.itemID;
 		
-		if (LMS_Settings.FIRST_PERSON_MODEL.getBool() && !holdingSpecialItem) {
+		if (LetMeSeeAddon.isIsCustomFirstPerson(mc) && !holdingSpecialItem) {
 			ci.cancel();
 		}
 	}

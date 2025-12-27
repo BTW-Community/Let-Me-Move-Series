@@ -2,6 +2,7 @@ package net.dravigen.let_me_see.mixin;
 
 import api.client.CustomUpdatingTexture;
 import net.dravigen.dranimation_lib.utils.GeneralUtils;
+import net.dravigen.let_me_see.LetMeSeeAddon;
 import net.dravigen.let_me_see.config.LMS_Settings;
 import net.minecraft.src.*;
 import org.lwjgl.opengl.GL11;
@@ -28,8 +29,7 @@ public abstract class RenderPlayerMixin extends RendererLivingEntity {
 			float par4, int par5, String par6, AbstractClientPlayer player) {
 		Minecraft mc = Minecraft.getMinecraft();
 		
-		if (player == mc.thePlayer && !(mc.currentScreen instanceof GuiContainerCreative || mc.currentScreen instanceof GuiInventory) && mc.gameSettings.thirdPersonView == 0 && LMS_Settings.FIRST_PERSON_MODEL.getBool())
-			return;
+		if (player == mc.thePlayer && LetMeSeeAddon.isIsCustomFirstPerson(mc)) return;
 	
 		instance.func_82393_a(v, par1, par2, par3, par4, par5, par6);
 	}
@@ -54,11 +54,7 @@ public abstract class RenderPlayerMixin extends RendererLivingEntity {
 		Minecraft mc = Minecraft.getMinecraft();
 		ItemStack heldItem = mc.thePlayer.getHeldItem();
 		
-		if (LMS_Settings.FIRST_PERSON_MODEL.getBool() &&
-				mc.gameSettings.thirdPersonView == 0 &&
-				heldItem != null &&
-				(heldItem.itemID == Item.map.itemID) &&
-				!(mc.currentScreen instanceof GuiContainerCreative || mc.currentScreen instanceof GuiInventory)) {
+		if (LetMeSeeAddon.isIsCustomFirstPerson(mc) && heldItem != null && (heldItem.itemID == Item.map.itemID)) {
 			this.modelBipedMain.bipedRightArm.showModel = true;
 			this.modelBipedMain.bipedLeftArm.showModel = true;
 		}
@@ -68,11 +64,9 @@ public abstract class RenderPlayerMixin extends RendererLivingEntity {
 	private void offsetPlayerIn1stPerson(AbstractClientPlayer entity, float par2, float par3, float par4,
 			CallbackInfo ci) {
 		Minecraft mc = Minecraft.getMinecraft();
-		if (LMS_Settings.FIRST_PERSON_MODEL.getBool() &&
+		if (LetMeSeeAddon.isIsCustomFirstPerson(mc) &&
 				entity == mc.thePlayer &&
-				mc.gameSettings.thirdPersonView == 0 &&
-				entity.height >= 1.4f &&
-				!(mc.currentScreen instanceof GuiContainerCreative || mc.currentScreen instanceof GuiInventory)) {
+				entity.height >= 1.4f) {
 			float v = (float) (4f * LMS_Settings.HEAD_OFFSET.getDouble());
 			
 			float i = entity.rotationYaw % 360 / 90 * GeneralUtils.pi / 2;

@@ -1,26 +1,36 @@
 package net.dravigen.let_me_see.mixin;
 
-import net.dravigen.let_me_see.config.LMS_Settings;
+import net.dravigen.let_me_see.LetMeSeeAddon;
 import net.minecraft.src.*;
-import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(RenderGlobal.class)
+@Mixin(value = RenderGlobal.class)
 public abstract class RenderGlobalMixin {
 	
 	@Shadow
 	private Minecraft mc;
 	
-	@Redirect(method = "renderEntities", at = @At(value = "FIELD", target = "Lnet/minecraft/src/GameSettings;thirdPersonView:I", opcode = Opcodes.GETFIELD, ordinal = 0))
-	private int renderPlayerIn1stPerson(GameSettings instance) {
-		if (LMS_Settings.FIRST_PERSON_MODEL.getBool() &&
-				!(mc.currentScreen instanceof GuiContainerCreative || mc.currentScreen instanceof GuiInventory)) {
-			return 1;
+	@Inject(method = "renderEntities", at = @At(value = "INVOKE", target = "Lnet/minecraft/src/Profiler;endStartSection(Ljava/lang/String;)V", ordinal = 2))
+	private void renderPlayerIn1stPerson(Vec3 par1Vec3, ICamera par2ICamera, float par3, CallbackInfo ci) {
+		if (LetMeSeeAddon.isIsCustomFirstPerson(mc)) {
+			RenderManager.instance.renderEntity(this.mc.thePlayer, par3);
+			
 		}
 		
-		return instance.thirdPersonView;
+		LetMeSeeAddon.isPlayerRenderedByFreeCam = false;
+	}
+	
+	@Redirect(method = "renderEntities", at = @At(value = "INVOKE", target = "Lnet/minecraft/src/RenderManager;renderEntity(Lnet/minecraft/src/Entity;F)V"))
+	private void isPlayerRendered(RenderManager instance, Entity par1Entity, float par2) {
+		if (par1Entity == this.mc.thePlayer) {
+			LetMeSeeAddon.isPlayerRenderedByFreeCam = true;
+		}
+		
+		instance.renderEntity(par1Entity, par2);
 	}
 }
